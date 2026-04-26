@@ -1,0 +1,2790 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>云图 Atlas — AI LAUNCHPAD</title>
+  <meta name="description" content="云图 Atlas — AI Launchpad。发现属于你的"小而美"，给做产品的人一个被发现的地方。" />
+  <link rel="canonical" href="https://pandawanderer.com/atlas" />
+  <meta property="og:title" content="云图 Atlas — AI LAUNCHPAD" />
+  <meta property="og:description" content="发现属于你的"小而美"。给做产品的人一个被发现的地方，给找工具的人一个发现的入口。" />
+  <meta property="og:url" content="https://pandawanderer.com/atlas" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+/* ============ Atlas BP — Mobile Cinematic Site ============ */
+
+:root {
+  --bg: #000005;
+  --bg-deep: #02030a;
+  --bg-soft: #08091a;
+  --fg: #f4f5fb;
+  --fg-dim: rgba(244, 245, 251, 0.62);
+  --fg-faint: rgba(244, 245, 251, 0.32);
+  --line: rgba(244, 245, 251, 0.12);
+  --line-strong: rgba(244, 245, 251, 0.22);
+  --accent: #7B9EFF;
+  --accent-soft: rgba(123, 158, 255, 0.18);
+  --accent-glow: rgba(123, 158, 255, 0.55);
+  --warn: #FFB87A;
+
+  --font-serif: 'PingFang SC', 'PingFang TC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'IBM Plex Mono', 'Menlo', 'Courier New', monospace;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  letter-spacing: 0.01em;
+  line-height: 1.7;
+}
+
+/* ============ Background layers ============ */
+
+.bg-stars,
+.bg-grid,
+.bg-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-stars { z-index: 0; }
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(123, 158, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(123, 158, 255, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, transparent 75%);
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.bg-vignette {
+  background:
+    radial-gradient(ellipse at center top, transparent 0%, rgba(0,0,5,0.55) 60%, rgba(0,0,5,0.95) 100%);
+  z-index: 2;
+}
+
+/* ============ Top HUD (timecode + chapter) ============ */
+
+.hud-top {
+  position: fixed;
+  top: calc(var(--safe-top) + 14px);
+  left: 16px;
+  right: 16px;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.hud-top .left,
+.hud-top .right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ============ Bottom subtitle bar ============ */
+
+.subtitle-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding: 14px 20px calc(14px + var(--safe-bottom));
+  background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.0));
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.subtitle-bar .ch-num {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.subtitle-bar .ch-title {
+  color: var(--fg);
+  letter-spacing: 0.16em;
+  text-align: right;
+  max-width: 60%;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 11px;
+  text-transform: none;
+}
+
+.progress-rail {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  z-index: 51;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* letterbox */
+.letterbox-top,
+.letterbox-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: #000;
+  z-index: 49;
+  pointer-events: none;
+}
+.letterbox-top { top: 0; }
+.letterbox-bottom { bottom: 0; }
+
+/* ============ Main scroller ============ */
+
+.stage {
+  position: relative;
+  z-index: 10;
+}
+
+.scene {
+  position: relative;
+  min-height: 100vh;
+  padding: 96px 24px 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* generic typography inside scenes */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+  display: inline-block;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+h1.title-cn {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(44px, 12vw, 80px);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  margin: 0 0 24px;
+  color: var(--fg);
+}
+
+h2.title-cn {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(32px, 8vw, 52px);
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  margin: 0 0 20px;
+}
+
+.title-en {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 20px;
+}
+
+.body-cn {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--fg);
+  letter-spacing: 0.02em;
+  text-wrap: pretty;
+}
+
+.body-cn p { margin: 0 0 18px; }
+
+.body-cn em {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.body-cn strong {
+  color: var(--fg);
+  font-weight: 500;
+  border-bottom: 1px solid var(--accent-soft);
+  padding-bottom: 1px;
+}
+
+.quote {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--fg);
+  letter-spacing: 0.02em;
+  border-left: 1px solid var(--accent);
+  padding: 4px 0 4px 18px;
+  margin: 28px 0;
+  position: relative;
+}
+
+.quote .en {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+  display: block;
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+/* mono labels */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.coord {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+}
+
+/* divider */
+.div-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0;
+  color: var(--fg-faint);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.div-line::before,
+.div-line::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ============ scene reveal animation ============ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+              transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--rd, 0ms);
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-only {
+  opacity: 0;
+  transition: opacity 1.6s ease-out;
+  transition-delay: var(--rd, 0ms);
+}
+.fade-only.in { opacity: 1; }
+
+.blur-in {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(20px);
+  transition: opacity 1.4s ease-out, filter 1.4s ease-out, transform 1.4s ease-out;
+  transition-delay: var(--rd, 0ms);
+}
+.blur-in.in {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* type-on (subtitle effect) */
+.typeon {
+  display: inline-block;
+  border-right: 1px solid var(--accent);
+  white-space: pre-wrap;
+  overflow: hidden;
+  width: 0;
+  transition: width 2.4s steps(40, end);
+  vertical-align: bottom;
+}
+.typeon.in { width: 100%; border-right-color: transparent; }
+
+/* ============ Specific scenes ============ */
+
+/* --- Hero / countdown --- */
+.scene-hero {
+  min-height: 100svh;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+.countdown {
+  font-family: var(--font-mono);
+  font-size: 72px;
+  font-weight: 300;
+  color: var(--accent);
+  text-shadow: 0 0 24px var(--accent-glow);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 36px;
+}
+
+.hero-mark {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 28px;
+}
+
+.hero-tagline {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 400;
+}
+.hero-tagline::before, .hero-tagline::after {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(64px, 18vw, 120px);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  margin: 0;
+  background: linear-gradient(180deg, #fff 0%, var(--accent) 130%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 28px rgba(123,158,255,0.18));
+}
+
+.hero-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-top: 24px;
+}
+
+.hero-byline {
+  position: absolute;
+  bottom: 136px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+}
+
+.hero-quote {
+  margin-top: 48px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--fg-dim);
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-quote .en {
+  display: block;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  margin-top: 14px;
+  line-height: 1.6;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: hover 2.6s ease-in-out infinite;
+}
+
+.scroll-hint::after {
+  content: "";
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+}
+
+@keyframes hover {
+  0%, 100% { transform: translate(-50%, 0); opacity: 0.7; }
+  50% { transform: translate(-50%, 6px); opacity: 1; }
+}
+
+/* --- Moments (chapter 1) --- */
+.moment-card {
+  position: relative;
+  border-top: 1px solid var(--line);
+  padding: 28px 0 0;
+  margin-bottom: 36px;
+}
+
+.moment-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.moment-head .timestamp {
+  color: var(--accent);
+}
+
+.moment-head .role {
+  color: var(--fg-faint);
+}
+
+.moment-card h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--fg);
+  margin: 0 0 12px;
+  letter-spacing: 0.02em;
+}
+
+/* --- Definition card --- */
+.def-card {
+  border: 1px solid var(--line-strong);
+  padding: 28px 22px;
+  margin: 28px 0;
+  background: linear-gradient(180deg, rgba(123,158,255,0.04), rgba(0,0,0,0.6));
+  position: relative;
+}
+
+.def-card::before,
+.def-card::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--accent);
+}
+.def-card::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.def-card::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+.def-card .label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.def-card .text {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.7;
+  font-weight: 400;
+  color: var(--fg);
+  letter-spacing: 0.02em;
+}
+
+/* --- Composition list (chapter 3) --- */
+.compo-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+.compo-row:last-child { border-bottom: 0; }
+
+.compo-row .id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  width: 28px;
+}
+
+.compo-row .name {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--fg);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.compo-row .name em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.compo-row .desc {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--fg-dim);
+  line-height: 1.6;
+}
+
+/* --- Why now (chapter 4) — three pillars --- */
+.pillar {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+}
+.pillar:last-child { border-bottom: 1px solid var(--line); }
+
+.pillar .num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  padding-top: 4px;
+  text-transform: uppercase;
+}
+
+.pillar .name {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.pillar .desc {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--fg-dim);
+  line-height: 1.7;
+}
+
+/* --- Users (chapter 5) — three persona cards --- */
+.persona {
+  margin: 36px 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.persona-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+
+.persona-head .tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.persona-head .role-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+}
+
+.persona h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: 0.02em;
+  margin: 0 0 14px;
+}
+
+.persona-section {
+  margin-top: 18px;
+}
+
+.persona-section .ttl {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 10px;
+}
+
+.persona-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--fg);
+}
+
+.persona-list li {
+  padding: 6px 0 6px 18px;
+  position: relative;
+}
+
+.persona-list li::before {
+  content: "·";
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+  font-size: 18px;
+  line-height: 1;
+  top: 8px;
+}
+
+.persona-list li em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+/* --- Three product moments (chapter 6) — film stills --- */
+.still {
+  position: relative;
+  margin: 36px 0;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(123,158,255,0.03), rgba(0,0,0,0.6));
+  padding: 24px 22px 22px;
+}
+
+.still-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.still-head .id { color: var(--accent); }
+.still-head .meta { color: var(--fg-faint); }
+
+.still-frame {
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(123,158,255,0.04) 0 6px,
+      rgba(0,0,0,0) 6px 12px);
+  position: relative;
+  margin-bottom: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.still-frame .frame-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+}
+
+.still-frame .frame-corners::before,
+.still-frame .frame-corners::after,
+.still-frame::before,
+.still-frame::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--accent);
+}
+.still-frame::before { top: 6px; right: 6px; border-top: 1px solid; border-right: 1px solid; }
+.still-frame::after { bottom: 6px; left: 6px; border-bottom: 1px solid; border-left: 1px solid; }
+
+.still-frame .preview-glyph {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+}
+
+.still h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 18px;
+  margin: 0 0 12px;
+  letter-spacing: 0.02em;
+}
+
+.still p {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--fg-dim);
+  margin: 0;
+}
+
+.still p em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+/* in-frame illustrative content */
+.frame-dashboard {
+  width: 80%;
+  height: 70%;
+  border: 1px solid var(--line-strong);
+  background: rgba(0,0,0,0.4);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+}
+.frame-dashboard .top { padding: 6px 8px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+.frame-dashboard .top .ok { color: var(--accent); }
+.frame-dashboard .body { padding: 8px; display: flex; gap: 10px; align-items: flex-end; }
+.frame-dashboard .bar {
+  width: 8px;
+  background: var(--accent);
+  opacity: 0.85;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.frame-search {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--fg-dim);
+  letter-spacing: 0.12em;
+}
+.frame-search .input {
+  border: 1px solid var(--accent);
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--fg);
+  background: rgba(123,158,255,0.06);
+}
+.frame-search .input::after {
+  content: "▮";
+  color: var(--accent);
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.frame-search .result {
+  border: 1px solid var(--line);
+  padding: 8px 10px;
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+.frame-search .result .cta { color: var(--accent); }
+
+.frame-newsletter {
+  width: 84%;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--fg-dim);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.frame-newsletter .nl-head { padding: 6px 8px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; color: var(--accent); }
+.frame-newsletter .nl-row { padding: 6px 8px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+.frame-newsletter .nl-row:last-child { border: 0; }
+.frame-newsletter .nl-row .num { color: var(--accent); }
+
+/* --- Phase timeline (chapter 7) --- */
+.phase {
+  position: relative;
+  padding: 28px 0 28px 32px;
+  border-left: 1px solid var(--line);
+  margin-left: 6px;
+}
+
+.phase::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 36px;
+  width: 9px;
+  height: 9px;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.phase .ph-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.phase .ph-id { color: var(--accent); }
+.phase .ph-time { color: var(--fg-faint); }
+
+.phase h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 20px;
+  margin: 0 0 10px;
+  letter-spacing: 0.02em;
+}
+
+.phase .ph-line {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--fg-dim);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.phase .ph-line em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.phase .ph-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+
+.phase .ph-meta span { color: var(--accent); }
+
+/* --- Atlas map (final scene) --- */
+.atlas-canvas-wrap {
+  position: relative;
+  margin: 36px auto;
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1 / 1;
+}
+
+.atlas-canvas-wrap canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.atlas-label-tl,
+.atlas-label-tr,
+.atlas-label-bl,
+.atlas-label-br {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+}
+.atlas-label-tl { top: 0; left: 0; }
+.atlas-label-tr { top: 0; right: 0; }
+.atlas-label-bl { bottom: 0; left: 0; }
+.atlas-label-br { bottom: 0; right: 0; }
+
+.atlas-center-text {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.atlas-center-text .en {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.atlas-center-text .cn {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+}
+
+/* --- Closing / CTA --- */
+.scene-closing {
+  text-align: center;
+  align-items: center;
+}
+
+.closing-quote {
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  margin: 28px 0;
+  text-wrap: balance;
+}
+
+.closing-quote em {
+  font-style: normal;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.closing-en {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  margin: 24px 0;
+  line-height: 1.8;
+}
+
+.cta-card {
+  border: 1px solid var(--accent);
+  padding: 28px 24px;
+  margin: 36px auto 24px;
+  max-width: 360px;
+  background: linear-gradient(180deg, rgba(123,158,255,0.06), rgba(0,0,0,0.7));
+  position: relative;
+}
+.cta-card::before,
+.cta-card::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--accent);
+}
+.cta-card::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.cta-card::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+.cta-card .label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.cta-card .handle {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  color: var(--fg);
+  margin-bottom: 12px;
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.cta-card .copy-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.cta-card .copy-btn:hover, .cta-card .copy-btn:active {
+  background: var(--accent);
+  color: var(--bg);
+}
+.cta-card .copy-btn.copied {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.cta-card .hint {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  color: var(--fg-dim);
+  line-height: 1.7;
+}
+
+.colophon {
+  margin-top: 60px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--fg-faint);
+  text-transform: uppercase;
+  line-height: 2;
+}
+
+.colophon .sep {
+  color: var(--accent);
+  margin: 0 8px;
+}
+
+/* --- Section title slate (acts as chapter break) --- */
+.slate {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 96px 24px;
+  position: relative;
+}
+
+.slate .ch-id {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slate .ch-id::before {
+  content: "";
+  width: 32px;
+  height: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.slate h1 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(40px, 11vw, 64px);
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+.slate .en {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+
+/* --- Tweaks panel polish --- */
+.tweaks-panel-host { font-family: var(--font-mono) !important; }
+
+@media (min-width: 720px) {
+  .scene { padding: 120px 64px 140px; max-width: 720px; margin: 0 auto; }
+  .slate { padding: 120px 64px; max-width: 720px; margin: 0 auto; }
+  .scene-hero { padding: 0 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .fade-only, .blur-in {
+    transition: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+  .typeon { transition: none !important; width: 100% !important; }
+}
+
+  </style>
+</head>
+<body>
+
+  <canvas class="bg-stars" id="bg-stars"></canvas>
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script>
+/* Persistent starfield + atlas convergence canvas */
+(function () {
+  const STAR_COUNT_BASE = 140;
+
+  const cvs = document.getElementById('bg-stars');
+  const ctx = cvs.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let W = 0, H = 0;
+  let stars = [];
+  let density = 1;
+
+  function resize() {
+    W = cvs.clientWidth = window.innerWidth;
+    H = cvs.clientHeight = window.innerHeight;
+    cvs.width = W * dpr;
+    cvs.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seed();
+  }
+
+  function seed() {
+    const N = Math.round(STAR_COUNT_BASE * density);
+    stars = new Array(N).fill(0).map(() => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      z: Math.random() * 0.9 + 0.1, // depth
+      r: Math.random() * 1.2 + 0.2,
+      tw: Math.random() * Math.PI * 2,
+      tws: 0.4 + Math.random() * 1.4,
+      hue: Math.random() < 0.15 ? 'a' : 'w' // accent vs white
+    }));
+  }
+
+  let scrollY = 0;
+  let scrollVel = 0;
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+    scrollVel = scrollY - lastScroll;
+    lastScroll = scrollY;
+  }, { passive: true });
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    const baseY = -scrollY * 0.06; // gentle parallax
+    const drift = (t * 0.000008);
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      // drift slowly across the sky
+      s.x += Math.sin(drift + i) * 0.02 * s.z;
+      // parallax driven by scroll velocity (depth)
+      let y = s.y + baseY * s.z * 4;
+      // wrap
+      y = ((y % H) + H) % H;
+      const tw = 0.55 + 0.45 * Math.sin(t * 0.001 * s.tws + s.tw);
+      const a = tw * (0.35 + 0.65 * s.z);
+      if (s.hue === 'a') {
+        ctx.fillStyle = `rgba(123, 158, 255, ${a})`;
+      } else {
+        ctx.fillStyle = `rgba(244, 245, 251, ${a})`;
+      }
+      ctx.beginPath();
+      ctx.arc(s.x, y, s.r * (0.6 + s.z), 0, Math.PI * 2);
+      ctx.fill();
+      // glow for the brightest
+      if (s.z > 0.85 && s.hue === 'a') {
+        ctx.fillStyle = `rgba(123, 158, 255, ${a * 0.18})`;
+        ctx.beginPath();
+        ctx.arc(s.x, y, s.r * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(draw);
+
+  window.__atlas = window.__atlas || {};
+  window.__atlas.setStarDensity = function (d) {
+    density = Math.max(0.1, Math.min(2.5, d));
+    seed();
+  };
+})();
+
+  </script>
+
+  <script type="text/babel">
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel"
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+function TweakColor({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input type="color" className="twk-swatch" value={value}
+             onChange={(e) => onChange(e.target.value)} />
+    </div>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+
+  </script>
+
+  <script type="text/babel">
+/* global React */
+const { useEffect, useRef, useState } = React;
+
+/* ----- Reveal-on-scroll hook ----- */
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal, .fade-only, .blur-in, .typeon');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+        } else if (e.boundingClientRect.top > window.innerHeight) {
+          // only re-arm when element is below viewport (scrolling back up)
+          e.target.classList.remove('in');
+        }
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' });
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
+
+/* ----- Scene wrapper ----- */
+function Scene({ id, chapter, title, children, className = '' }) {
+  return (
+    <section
+      id={id}
+      data-chapter={chapter || ''}
+      data-title={title || ''}
+      data-screen-label={chapter ? `${chapter} ${title || ''}` : id}
+      className={`scene ${className}`}
+    >
+      {children}
+    </section>
+  );
+}
+
+/* ----- Slate (chapter break) ----- */
+function Slate({ id, chapter, chapterEn, title, en }) {
+  return (
+    <section
+      id={id}
+      data-chapter={chapter}
+      data-title={title}
+      data-screen-label={`${chapter} ${title}`}
+      className="slate"
+    >
+      <div className="ch-id reveal">{chapter} · {chapterEn}</div>
+      <h1 className="reveal" style={{ '--rd': '120ms' }}>{title}</h1>
+      <div className="en reveal" style={{ '--rd': '320ms' }}>{en}</div>
+    </section>
+  );
+}
+
+/* ----- Hero countdown ----- */
+function Hero() {
+  const [count, setCount] = useState(3);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (count <= 0) {
+      setDone(true);
+      return;
+    }
+    const t = setTimeout(() => setCount(count - 1), 700);
+    return () => clearTimeout(t);
+  }, [count]);
+
+  return (
+    <section
+      id="s-hero"
+      data-chapter="00"
+      data-title="开场"
+      data-screen-label="00 开场"
+      className="scene scene-hero"
+    >
+      {!done ? (
+        <div style={{ textAlign: 'center' }}>
+          <div className="hero-mark fade-only in">A FILM BY JOSH</div>
+          <div className="countdown" key={count}>{String(count).padStart(2, '0')}</div>
+          <div className="mono" style={{ color: 'var(--fg-faint)' }}>// SYSTEM BOOT · 2026</div>
+        </div>
+      ) : (
+        <div style={{ textAlign: 'center', width: '100%' }}>
+          <div className="hero-tagline fade-only in">AI LAUNCHPAD</div>
+          <h1 className="hero-title fade-only in" style={{ '--rd': '180ms' }}>云图</h1>
+          <div className="hero-sub fade-only in" style={{ '--rd': '600ms' }}>ATLAS · A MAP OF THE AI BEAUTIES</div>
+          <div className="hero-quote fade-only in" style={{ '--rd': '1100ms' }}>
+            <span>发现属于你的“小而美”</span>
+            <span className="en">A BLUEPRINT, IN MOTION.</span>
+          </div>
+          <div className="hero-byline fade-only in" style={{ '--rd': '1500ms' }}>
+            JOSH · 2026.04.26 · DRAFT v0.1
+          </div>
+          <div className="scroll-hint fade-only in" style={{ '--rd': '1800ms' }}>SCROLL</div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ----- Chapter 0: 名字的故事 ----- */
+function ChNaming() {
+  return (
+    <>
+      <Slate id="s-0-slate" chapter="CH · 00" chapterEn="ORIGIN" title="名字的故事" en="THE STORY OF A NAME" />
+      <Scene id="s-0" chapter="CH · 00" title="名字的故事">
+        <div className="eyebrow reveal">ATLAS · 三层重量</div>
+        <h2 className="title-cn reveal" style={{ '--rd': '100ms' }}>三层重量，一个名字。</h2>
+        <div className="body-cn">
+          <p className="reveal" style={{ '--rd': '200ms' }}>
+            云图的英文名是 <em>Atlas</em>。一个词，三层重量——
+          </p>
+          <p className="reveal" style={{ '--rd': '300ms' }}>
+            <strong>地图集</strong>，把整个世界系统地铺展开来；<strong>希腊神话里肩扛苍穹的巨人</strong>，以一己之身托起世界；以及那部电影<strong>《云图》</strong>。
+          </p>
+        </div>
+
+        <div className="quote reveal" style={{ '--rd': '400ms' }}>
+          我们的生命从不只属于自己——每一次善意的举动，都会化作涟漪，穿越世界，穿越时间。
+          <span className="en">"Our lives are not our own. By each act of kindness, we ripple across the world and through time."</span>
+        </div>
+
+        <div className="body-cn">
+          <p className="reveal" style={{ '--rd': '200ms' }}>
+            六段故事，跨越数个世纪。每一个看似微不足道的选择，都在远方某个陌生人身上掀起回响。最终，所有灵魂在同一张隐形的地图上彼此相认。
+          </p>
+          <p className="reveal" style={{ '--rd': '300ms' }}>
+            而云图里——一个 indie 开发者周二深夜上线的小工具，周四被一个学品牌的大学生撞见，周日被投资人转进了 200 人的圈子。<em>三个从未谋面的人，因为同一张地图，命运开始交错。</em>
+          </p>
+          <p className="reveal" style={{ '--rd': '400ms' }}>
+            云图不是工具目录。它是一张正在被绘制中的世界地图。
+          </p>
+          <p className="reveal" style={{ '--rd': '500ms' }}>
+            地图从来不是凭空出现的——<em>它从第一个坐标，被一个人，画下第一笔。</em>
+          </p>
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+/* ----- Chapter 1: 缘起 / 三个真实的瞬间 ----- */
+function ChMoments() {
+  const moments = [
+    {
+      ts: 'T-002 · TUE 23:47',
+      role: 'INDIE DEV',
+      title: '一个 indie 开发者把 vibe coding 出来的小 demo 部署上线。',
+      desc: '做完之后，完全不知道发到哪里能被人看到。发朋友圈太低效，发知乎被淹没，Product Hunt 看不懂中文，小红书被算法埋了。做出来了，但好像它从来没存在过。',
+    },
+    {
+      ts: 'T-001 · THU 14:12',
+      role: 'STUDENT · BRAND DESIGN',
+      title: '一个学品牌设计的大学生，要在 24 小时内做出一组品牌样机交作业。',
+      desc: '她知道现在有很多 AI 工具能帮她，但完全不知道哪一个最适合"品牌样机"这个具体场景——打开 Toolify 看到 800 个图像生成工具，还是无从下手。最后她翻出 Photoshop 自己做了一晚上。',
+    },
+    {
+      ts: 'T-000 · SUN 09:03',
+      role: 'INVESTOR',
+      title: '一个做投资的人，每周都在打听"最近有什么新的 indie AI 产品值得看"。',
+      desc: '想紧跟趋势。但能看到的信息源都是英文 Twitter 和 ProductHunt，没有一个中文媒介在做这件事。',
+    },
+  ];
+
+  return (
+    <>
+      <Slate id="s-1-slate" chapter="CH · 01" chapterEn="GENESIS" title="三个真实的瞬间" en="THREE MOMENTS · COORDINATES OF A NEED" />
+      <Scene id="s-1" chapter="CH · 01" title="三个真实的瞬间">
+        <div className="eyebrow reveal">三个坐标，指向同一件事</div>
+        <h2 className="title-cn reveal" style={{ '--rd': '100ms' }}>它真实存在，但没人在做。</h2>
+
+        {moments.map((m, i) => (
+          <div className="moment-card reveal" key={i} style={{ '--rd': `${i * 120}ms` }}>
+            <div className="moment-head">
+              <span className="timestamp">{m.ts}</span>
+              <span className="role">{m.role}</span>
+            </div>
+            <h3>{m.title}</h3>
+            <div className="body-cn"><p>{m.desc}</p></div>
+          </div>
+        ))}
+
+        <div className="div-line">CONVERGENCE</div>
+
+        <div className="def-card reveal">
+          <div className="label">DEFINITION · 一句话</div>
+          <div className="text">
+            <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>云图</em>——给做产品的人一个被发现的地方，给找工具的人一个发现的入口，给追趋势的人一份可信任的导览。
+          </div>
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+/* ----- Chapter 2: 市场现状 ----- */
+function ChMarket() {
+  return (
+    <>
+      <Slate id="s-2-slate" chapter="CH · 02" chapterEn="LANDSCAPE" title="目录站很多，但没有发现平台。" en="DIRECTORIES EVERYWHERE, NO DISCOVERY" />
+      <Scene id="s-2" chapter="CH · 02" title="市场现状">
+        <div className="eyebrow reveal">现有玩家 · 28000 个工具，零判断</div>
+        <div className="body-cn">
+          <p className="reveal">
+            中文 AI 工具站不少：AI 工具集、AI 导航网、Toolify 中文版、AMZ123…… 但它们都有一个共同问题——
+          </p>
+          <p className="reveal" style={{ '--rd': '160ms', fontSize: 22, lineHeight: 1.4 }}>
+            <em>它们是"目录"，不是"发现平台"。</em>
+          </p>
+        </div>
+
+        <div className="div-line reveal">DIRECTORY</div>
+
+        <div className="body-cn">
+          <p className="reveal">
+            <strong>目录站</strong>——爬虫批量收录、SEO 流量逻辑、每个工具一段流水线介绍、没有编辑判断、没有真实使用场景、没有开发者对话。Toolify 中文版有 28000 多个工具，但<em>没有任何一个让你"看完想立刻试"</em>。
+          </p>
+        </div>
+
+        <div className="div-line reveal">VS · DISCOVERY</div>
+
+        <div className="body-cn">
+          <p className="reveal">
+            <strong>发现平台</strong>——有人格化的编辑判断、深度试用后的真实评测、按"你要解决什么问题"组织内容、能在站内直接试用、能和开发者直接对话、能积累信任。
+          </p>
+          <p className="reveal" style={{ '--rd': '160ms' }}>
+            <em>云图想做的是后者。</em>就像早期豌豆荚之于 Google Play、早期少数派之于 App Store——不是替代，是在更前置的"发现"环节做事。
+          </p>
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+/* ----- Chapter 3: 云图是什么 ----- */
+function ChDefinition() {
+  const items = [
+    { id: '01', name: '少数派的<em>内容深度</em>', desc: '精选 + 深度评测，有 taste。' },
+    { id: '02', name: '豌豆荚的<em>发现体验</em>', desc: '场景化分类，普通人也能找到工具。' },
+    { id: '03', name: 'ProductHunt 的<em>开发者关系</em>', desc: '开发者来这里发布、获取真实反馈、建立个人品牌。' },
+    { id: '04', name: 'Steam 的<em>长期愿景</em>', desc: '终局是支付撮合 + AI 应用商城。' },
+  ];
+  return (
+    <>
+      <Slate id="s-3-slate" chapter="CH · 03" chapterEn="THESIS" title="云图是什么" en="ONE LINE · A NEW COMBINATION" />
+      <Scene id="s-3" chapter="CH · 03" title="云图是什么">
+        <div className="eyebrow reveal">一句话定义</div>
+        <div className="def-card reveal" style={{ '--rd': '100ms' }}>
+          <div className="label">DEFINITION</div>
+          <div className="text">
+            云图是一个为<em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>中文 AI 用户</em>提供"<em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>发现 + 试用 + 交流</em>"的平台，服务三类人——做产品的 indie 开发者、解决具体问题的普通用户、追踪趋势的高密度信息消费者。
+          </div>
+        </div>
+
+        <div className="mono reveal" style={{ marginTop: 36, marginBottom: 12, '--rd': '120ms' }}>
+          // FORM · 重新组合
+        </div>
+        <div className="reveal" style={{ '--rd': '180ms' }}>
+          {items.map((it, i) => (
+            <div className="compo-row" key={i}>
+              <div className="id">{it.id}</div>
+              <div>
+                <div className="name" dangerouslySetInnerHTML={{ __html: it.name }} />
+                <div className="desc">{it.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="body-cn" style={{ marginTop: 24 }}>
+          <p className="reveal">
+            每一层都不是任意一个现有产品的复制，<em>它是这些精髓的重新组合。</em>
+          </p>
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+/* ----- Chapter 4: 为什么是现在 ----- */
+function ChWhyNow() {
+  const pillars = [
+    {
+      num: '01',
+      name: 'Indie AI 开发者数量爆发',
+      desc: 'AI 编程工具（Cursor、Claude Code、Lovable、Bolt）让一个人可以在一周内做出过去需要一个团队做的产品。Vibe coding 已经成为 indie 圈最热的标签——做产品从来没这么轻、这么快、这么爽过。',
+    },
+    {
+      num: '02',
+      name: '用户对 AI 工具的需求大众化',
+      desc: '不再只是技术圈极客，普通办公室白领、设计专业学生、自由职业者、考研党都在主动找 AI 工具用。需求侧从来没有这么扩散过。',
+    },
+    {
+      num: '03',
+      name: '现有发现渠道全部失灵',
+      desc: '微信公众号被算法压制、知乎信息密度低、小红书算法不友好、Twitter 翻墙门槛高、Product Hunt 全英文。两端都需要一个新的连接器，但没有一个在线产品在做这件事。',
+    },
+  ];
+
+  return (
+    <>
+      <Slate id="s-4-slate" chapter="CH · 04" chapterEn="WINDOW" title="为什么是现在" en="A CLASSIC PLATFORM WINDOW · 2026" />
+      <Scene id="s-4" chapter="CH · 04" title="为什么是现在">
+        <div className="eyebrow reveal">三件事，同时发生</div>
+        <h2 className="title-cn reveal" style={{ '--rd': '100ms' }}>窗口期不会永远开着。</h2>
+
+        <div style={{ marginTop: 28 }}>
+          {pillars.map((p, i) => (
+            <div className="pillar reveal" key={i} style={{ '--rd': `${i * 140}ms` }}>
+              <div className="num">{p.num}</div>
+              <div>
+                <div className="name">{p.name}</div>
+                <div className="desc">{p.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="body-cn" style={{ marginTop: 32 }}>
+          <p className="reveal">
+            <em>供给爆发 + 需求扩散 + 渠道失灵</em>——这是平台诞生的经典窗口期。
+          </p>
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+/* ----- Chapter 5: 三类用户 ----- */
+function ChUsers() {
+  const personas = [
+    {
+      tag: 'USER · A',
+      role: 'SUPPLY-SIDE',
+      name: 'Indie 开发者 / Vibe Coder',
+      pivot: '没有他们，云图就是死的。',
+      pains: [
+        '做出来没人看，缺一个能被发现的展示场。',
+        '想要一个能<em>快速试错、验证想法、敏捷迭代</em>的环境——把 demo 抛出去，最快速度看到真实用户怎么用、怎么评、卡在哪。',
+        '想建立个人品牌，长期累积作品集。',
+        '想知道用户为什么不付费，但单兵作战拿不到这种数据。',
+        '长期想商业化，但不知道从哪开始。',
+      ],
+      values: [
+        '一个能被<em>中文用户</em>搜到的展示页。',
+        '<em>真实使用数据看板</em>（谁试了、试了多久、停在哪一步、留了什么反馈）。',
+        '一键发布迭代版本（v1 / v2 / v3 持续累积）。',
+        '中长期的支付撮合（让产品真正能赚钱）。',
+        '一个能持续累积的"个人作品集"。',
+      ],
+    },
+    {
+      tag: 'USER · B',
+      role: 'DEMAND-SIDE',
+      name: '普通用户 / 解决具体问题的人',
+      pivot: '没有他们，开发者来了也走。',
+      pains: [
+        '有非常具体的问题，但<em>不知道用哪个 AI 工具最合适</em>。',
+        '不想从 28000 个工具里大海捞针。',
+        '不想为试错付费、不想看技术评测。',
+        '希望"3 分钟内决定要不要用"。',
+      ],
+      values: [
+        '按"<em>你要解决什么具体问题</em>"找工具，不按功能分类。',
+        '在站内<em>直接试用</em>（不用跳转、不用注册海外账号）。',
+        '简单的"什么人该用、什么人别用"的判断。',
+        '看到同样身份、同样场景的人的真实反馈。',
+      ],
+    },
+    {
+      tag: 'USER · C',
+      role: 'AMPLIFIER',
+      name: '高密度信息消费者',
+      pivot: '没有他们，东西做得再好也没人转发。',
+      pains: [
+        '想紧跟趋势、不想被 SEO 垃圾内容浪费时间。',
+        '想看到有判断力的精选。',
+        '想找到投资 / 创业 / 学习机会。',
+      ],
+      values: [
+        '每周精选邮件，有明确的"<em>为什么这个值得看</em>"。',
+        '深度的产品分析、商业模式拆解、行业判断。',
+        '一个能转发出去显得"<em>有 taste</em>"的信息源。',
+      ],
+    },
+  ];
+
+  return (
+    <>
+      <Slate id="s-5-slate" chapter="CH · 05" chapterEn="CAST" title="云图服务的三类人" en="THE CAST · SUPPLY · DEMAND · AMPLIFIER" />
+      <Scene id="s-5" chapter="CH · 05" title="三类用户">
+        <div className="eyebrow reveal">每一层，都有清晰的"为什么来"</div>
+
+        {personas.map((p, i) => (
+          <div className="persona" key={i}>
+            <div className="persona-head reveal">
+              <span className="tag">{p.tag}</span>
+              <span className="role-label">{p.role}</span>
+            </div>
+            <h3 className="reveal" style={{ '--rd': '60ms' }}>{p.name}</h3>
+            <div className="body-cn reveal" style={{ '--rd': '120ms' }}>
+              <p style={{ color: 'var(--fg-dim)', fontStyle: 'italic', fontSize: 14 }}>{p.pivot}</p>
+            </div>
+            <div className="persona-section reveal" style={{ '--rd': '180ms' }}>
+              <div className="ttl">PAIN POINTS</div>
+              <ul className="persona-list">
+                {p.pains.map((x, j) => (
+                  <li key={j} dangerouslySetInnerHTML={{ __html: x }} />
+                ))}
+              </ul>
+            </div>
+            <div className="persona-section reveal" style={{ '--rd': '260ms' }}>
+              <div className="ttl">WHAT WE OFFER</div>
+              <ul className="persona-list">
+                {p.values.map((x, j) => (
+                  <li key={j} dangerouslySetInnerHTML={{ __html: x }} />
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </Scene>
+    </>
+  );
+}
+
+Object.assign(window, { useReveal, Scene, Slate, Hero, ChNaming, ChMoments, ChMarket, ChDefinition, ChWhyNow, ChUsers });
+
+  </script>
+
+  <script type="text/babel">
+/* global React */
+
+/* ----- Chapter 6: 三个产品瞬间（电影画面） ----- */
+function ChProductMoments() {
+  return (
+    <>
+      <Slate id="s-6-slate" chapter="CH · 06" chapterEn="STILLS" title="三个产品瞬间" en="THREE STILLS · FROM THE FILM CALLED ATLAS" />
+      <Scene id="s-6" chapter="CH · 06" title="三个产品瞬间">
+        <div className="eyebrow reveal">画面就清晰了</div>
+
+        {/* still 1 — dev dashboard */}
+        <div className="still reveal">
+          <div className="still-head">
+            <span className="id">SCENE 01 · TUE 23:47</span>
+            <span className="meta">INT · 开发者后台</span>
+          </div>
+          <div className="still-frame">
+            <span className="frame-tag">[ DASHBOARD · v2 BUILDING ]</span>
+            <div className="frame-dashboard">
+              <div className="top">
+                <span>// AI 简历优化器</span>
+                <span className="ok">+42 USERS</span>
+              </div>
+              <div className="body">
+                <div className="bar" style={{ height: '40%' }}></div>
+                <div className="bar" style={{ height: '70%' }}></div>
+                <div className="bar" style={{ height: '55%' }}></div>
+                <div className="bar" style={{ height: '90%' }}></div>
+                <div className="bar" style={{ height: '65%' }}></div>
+                <div className="bar" style={{ height: '80%' }}></div>
+                <div className="bar" style={{ height: '50%' }}></div>
+              </div>
+            </div>
+          </div>
+          <h3>开发者小 X 周二晚上</h3>
+          <p>
+            刚把 vibe coding 出来的 AI 简历优化工具部署上线，发到云图。第二天早上他打开后台——<em>42 人试用过、8 人留下了文字反馈、3 人收藏</em>。其中一条说"如果能支持 PDF 直接上传就好了"——他立刻知道下一步该做什么。在这之前，他在朋友圈发了三天，<em>只有他妈点了赞</em>。当晚他迭代了一版 v2，继续放回云图，数据立刻有了对比。
+          </p>
+        </div>
+
+        {/* still 2 — student search */}
+        <div className="still reveal">
+          <div className="still-head">
+            <span className="id">SCENE 02 · THU 14:12</span>
+            <span className="meta">EXT · 大学图书馆</span>
+          </div>
+          <div className="still-frame">
+            <span className="frame-tag">[ SEARCH · BRAND MOCKUP ]</span>
+            <div className="frame-search">
+              <div className="input">品牌样机生成</div>
+              <div className="result">
+                <span>MOCKUP · STUDIO</span>
+                <span className="cta">立即试用 →</span>
+              </div>
+              <div className="result">
+                <span>23 个设计专业学生用过</span>
+                <span className="cta">★★★★☆</span>
+              </div>
+            </div>
+          </div>
+          <h3>大学生小 Y 周四下午</h3>
+          <p>
+            明天要交一份品牌课作业，需要一组 logo 在 T 恤、咖啡杯、名片上的展示样机。她打开云图，搜"品牌样机生成"，<em>第一个结果是一个专门做 mockup 的 indie 工具，带"立即试用"按钮</em>，旁边还标着"被 23 个设计专业学生使用过"。她上传了 logo，30 秒后看到一组完整样机，直接导出。<em>省下了一晚上的 Photoshop 时间。</em>
+          </p>
+        </div>
+
+        {/* still 3 — investor newsletter */}
+        <div className="still reveal">
+          <div className="still-head">
+            <span className="id">SCENE 03 · SUN 09:03</span>
+            <span className="meta">INT · 街角咖啡店</span>
+          </div>
+          <div className="still-frame">
+            <span className="frame-tag">[ WEEKLY · 5 PICKS ]</span>
+            <div className="frame-newsletter">
+              <div className="nl-head">
+                <span>本周 5 个值得看的 AI 产品</span>
+                <span>W17 · 2026</span>
+              </div>
+              <div className="nl-row"><span><span className="num">01</span> · MOCKUP STUDIO</span><span>+312% WoW</span></div>
+              <div className="nl-row"><span><span className="num">02</span> · DEEPSEARCH CN</span><span>+184% WoW</span></div>
+              <div className="nl-row"><span><span className="num">03</span> · RESUME AI v2</span><span>+ 96% WoW</span></div>
+              <div className="nl-row"><span><span className="num">04</span> · NOTE FORGE</span><span>+ 71% WoW</span></div>
+              <div className="nl-row"><span><span className="num">05</span> · VOICE LAB</span><span>+ 44% WoW</span></div>
+            </div>
+          </div>
+          <h3>投资人小 L 周日早上</h3>
+          <p>
+            咖啡店打开邮箱，看到云图发的"本周 5 个值得看的 AI 产品"——每个都附<em>核心数据 + 编辑的两句话点评</em>。他看完转发到一个 200 人的投资群，说"<em>这是每周必看的</em>"。
+          </p>
+        </div>
+
+        <div className="quote reveal">
+          这三个瞬间就是云图的灵魂。任何一个现有平台都做不出这三个瞬间。
+          <span className="en">"THE SOUL OF ATLAS LIVES IN THESE THREE FRAMES."</span>
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+/* ----- Chapter 7: 商业模式 ----- */
+function ChBusiness() {
+  const phases = [
+    {
+      id: 'PHASE 0',
+      time: 'M0 — M12',
+      title: '养活自己',
+      line: '主要收入：<em>渠道分销返佣</em>。和现有 AI API 中转站合作，在云图合适位置推荐他们的服务，拿 10–30% 返佣。',
+      meta: 'MRR · ¥3K — ¥10K · 够养服务器',
+    },
+    {
+      id: 'PHASE 1',
+      time: 'M12 — M24',
+      title: '验证商业可行性',
+      line: '主要：<em>开发者侧付费推广</em>（首发推广 $299–999，做深度评测 + 首页 + 真实试用反馈）。辅助：<em>Pro 用户订阅</em>（¥39/月 或 ¥299/年）。',
+      meta: 'MRR · $5K — $15K · 5–10 万月活',
+    },
+    {
+      id: 'PHASE 2',
+      time: 'M24 — M36',
+      title: '做支付撮合',
+      line: '<em>真正的商业护城河</em>。给开发者提供"集成 SDK 一行代码搞定支付"，抽 10–15% 撮合费。比 Stripe 重，比 App Store 轻。',
+      meta: 'GMV · $100K — $1M / mo · 平台分成 $10K — $100K',
+    },
+    {
+      id: 'PHASE 3',
+      time: 'M36+',
+      title: 'AI 时代的中文 App Store',
+      line: '内嵌试用 + 国内合规副本 + 完整支付通道 + 开发者后台 + 用户钱包。<em>这是最后一步，不是第一步。</em>',
+      meta: '融资 · 团队 · 合规升级',
+    },
+  ];
+
+  return (
+    <>
+      <Slate id="s-7-slate" chapter="CH · 07" chapterEn="ARC" title="商业模式：从轻到重" en="A FOUR-ACT REVENUE ARC" />
+      <Scene id="s-7" chapter="CH · 07" title="商业模式">
+        <div className="eyebrow reveal">不会第一天就变现，但路径已经清楚</div>
+
+        <div style={{ marginTop: 24 }}>
+          {phases.map((ph, i) => (
+            <div className="phase reveal" key={i} style={{ '--rd': `${i * 100}ms` }}>
+              <div className="ph-head">
+                <span className="ph-id">{ph.id}</span>
+                <span className="ph-time">{ph.time}</span>
+              </div>
+              <h3>{ph.title}</h3>
+              <div className="ph-line" dangerouslySetInnerHTML={{ __html: ph.line }} />
+              <div className="ph-meta">
+                <span>// </span>{ph.meta}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="body-cn" style={{ marginTop: 28 }}>
+          <p className="reveal">
+            第一步是做好"<em>发现 + 评测 + 社区</em>"这件最朴素的事。
+          </p>
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+/* ----- Chapter 8: Atlas 地图 / 结尾 ----- */
+function AtlasMap() {
+  const ref = React.useRef(null);
+  const inView = React.useRef(false);
+
+  React.useEffect(() => {
+    const cvs = ref.current;
+    if (!cvs) return;
+    const ctx = cvs.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function size() {
+      const rect = cvs.getBoundingClientRect();
+      cvs.width = rect.width * dpr;
+      cvs.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size();
+
+    const W = () => cvs.getBoundingClientRect().width;
+    const H = () => cvs.getBoundingClientRect().height;
+
+    // generate point cloud arranged into "atlas map" silhouette (a circle with constellation lines)
+    const N = 90;
+    const points = [];
+    for (let i = 0; i < N; i++) {
+      const angle = (i / N) * Math.PI * 2;
+      const radius = 0.32 + Math.random() * 0.08;
+      // perturb to look organic
+      const cx = 0.5 + Math.cos(angle) * radius + (Math.random() - 0.5) * 0.04;
+      const cy = 0.5 + Math.sin(angle) * radius + (Math.random() - 0.5) * 0.04;
+      // start from random scattered position
+      points.push({
+        sx: Math.random(),
+        sy: Math.random(),
+        tx: cx,
+        ty: cy,
+        x: Math.random(),
+        y: Math.random(),
+        delay: Math.random() * 0.5,
+        connected: false,
+      });
+    }
+    // add a few inner points to fill the constellation
+    for (let i = 0; i < 24; i++) {
+      const r = Math.random() * 0.28;
+      const a = Math.random() * Math.PI * 2;
+      points.push({
+        sx: Math.random(),
+        sy: Math.random(),
+        tx: 0.5 + Math.cos(a) * r,
+        ty: 0.5 + Math.sin(a) * r,
+        x: Math.random(),
+        y: Math.random(),
+        delay: 0.2 + Math.random() * 0.6,
+      });
+    }
+
+    let progress = 0;
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { inView.current = e.isIntersecting; });
+    }, { threshold: 0.3 });
+    io.observe(cvs);
+
+    function ease(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+
+    function draw() {
+      const w = W(), h = H();
+      ctx.clearRect(0, 0, w, h);
+
+      if (inView.current) progress = Math.min(1, progress + 0.005);
+
+      // draw outer ring (compass)
+      ctx.strokeStyle = 'rgba(123, 158, 255, 0.18)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, Math.min(w, h) * 0.42, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, Math.min(w, h) * 0.32, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // crosshairs
+      ctx.strokeStyle = 'rgba(123, 158, 255, 0.12)';
+      ctx.beginPath();
+      ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2);
+      ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h);
+      ctx.stroke();
+
+      // points: lerp from scattered to target
+      points.forEach(p => {
+        const local = Math.max(0, Math.min(1, (progress - p.delay) / (1 - p.delay)));
+        const t = ease(local);
+        p.x = p.sx + (p.tx - p.sx) * t;
+        p.y = p.sy + (p.ty - p.sy) * t;
+      });
+
+      // draw connecting lines once mostly converged
+      if (progress > 0.6) {
+        const conn = Math.min(1, (progress - 0.6) / 0.4);
+        ctx.strokeStyle = `rgba(123, 158, 255, ${0.18 * conn})`;
+        ctx.lineWidth = 0.6;
+        // connect points within proximity
+        for (let i = 0; i < points.length; i++) {
+          for (let j = i + 1; j < points.length; j++) {
+            const a = points[i], b = points[j];
+            const dx = (a.x - b.x) * w, dy = (a.y - b.y) * h;
+            const d = Math.sqrt(dx * dx + dy * dy);
+            if (d < 50) {
+              ctx.beginPath();
+              ctx.moveTo(a.x * w, a.y * h);
+              ctx.lineTo(b.x * w, b.y * h);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // points
+      points.forEach((p, i) => {
+        const local = Math.max(0, Math.min(1, (progress - p.delay) / (1 - p.delay)));
+        const r = 1.2 + local * 1.0;
+        const a = 0.4 + local * 0.5;
+        ctx.fillStyle = `rgba(123, 158, 255, ${a})`;
+        ctx.beginPath();
+        ctx.arc(p.x * w, p.y * h, r, 0, Math.PI * 2);
+        ctx.fill();
+        if (local > 0.9 && i % 4 === 0) {
+          ctx.fillStyle = `rgba(123, 158, 255, 0.12)`;
+          ctx.beginPath();
+          ctx.arc(p.x * w, p.y * h, 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      });
+
+      // center mark
+      if (progress > 0.85) {
+        const a = (progress - 0.85) / 0.15;
+        ctx.fillStyle = `rgba(244, 245, 251, ${a})`;
+        ctx.beginPath();
+        ctx.arc(w / 2, h / 2, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = `rgba(123, 158, 255, ${a * 0.6})`;
+        ctx.beginPath();
+        ctx.arc(w / 2, h / 2, 8, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    window.addEventListener('resize', size);
+    return () => {
+      window.removeEventListener('resize', size);
+      io.disconnect();
+    };
+  }, []);
+
+  return (
+    <div className="atlas-canvas-wrap reveal">
+      <div className="atlas-label-tl">N · 41.0°</div>
+      <div className="atlas-label-tr">FIRST COORDINATE</div>
+      <div className="atlas-label-bl">JOSH · 2026</div>
+      <div className="atlas-label-br">E · 116.0°</div>
+      <canvas ref={ref}></canvas>
+    </div>
+  );
+}
+
+function CtaCard() {
+  const [copied, setCopied] = React.useState(false);
+  const handle = 'Kindajoshua2020';
+
+  const onCopy = async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(handle);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = handle;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch (e) {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <div className="cta-card reveal" style={{ '--rd': '240ms' }}>
+      <div className="label">JOIN · FELLOW TRAVELERS</div>
+      <div className="handle">
+        <span>{handle}</span>
+        <button
+          type="button"
+          className={`copy-btn${copied ? ' copied' : ''}`}
+          onClick={onCopy}
+          aria-label="复制微信号"
+        >
+          {copied ? '✓ COPIED' : '⧉ COPY'}
+        </button>
+      </div>
+      <div className="hint">
+        微信加我聊聊。云图现在是单兵作战，需要更多同路人——indie 开发者、AI 重度用户、内容创作者、早期投资人，都欢迎。
+      </div>
+    </div>
+  );
+}
+
+function ChClosing() {
+  return (
+    <>
+      <Slate id="s-8-slate" chapter="CH · 08" chapterEn="FIN" title="一张地图，从第一个坐标开始画。" en="THE FIRST COORDINATE · BEGIN" />
+      <Scene id="s-8" chapter="CH · 08" title="结尾" className="scene-closing">
+        <div className="eyebrow reveal" style={{ justifyContent: 'center' }}>FIN</div>
+
+        <div className="body-cn reveal" style={{ '--rd': '100ms' }}>
+          <p>中国互联网创业失败率是 95% 以上，内容平台尤其难做。但有几件事是确定的——</p>
+        </div>
+
+        <div className="div-line reveal">CERTAINTIES</div>
+
+        <div className="body-cn" style={{ textAlign: 'left' }}>
+          <p className="reveal">
+            <strong>痛点是真实的。</strong>indie 开发者做出来没人看，不是个别现象，是结构性困境。这两个痛点不会自动消失。
+          </p>
+          <p className="reveal" style={{ '--rd': '120ms' }}>
+            <strong>窗口期是真实的。</strong>Vibe coding 让供给爆发，AI 需求大众化让需求扩散，中间的连接器还没人做好。
+          </p>
+          <p className="reveal" style={{ '--rd': '240ms' }}>
+            <strong>切入点是真实的。</strong>不是要颠覆任何人，只是在"发现"这个最前置的环节，做一件别人没做好的事。
+          </p>
+        </div>
+
+        <AtlasMap />
+
+        <div className="atlas-center-text reveal">
+          <div className="en">A · MAP · OF · THE · AI · WORLD</div>
+          <div className="cn">一张地图，从第一个坐标开始画。</div>
+        </div>
+
+        <div className="closing-quote reveal" style={{ '--rd': '120ms' }}>
+          <em>能开始的最好时机，就是现在。</em>
+        </div>
+
+        <div className="closing-en reveal" style={{ '--rd': '180ms' }}>
+          "THE BEST TIME TO BEGIN — IS NOW."
+        </div>
+
+        <CtaCard />
+
+        <div className="colophon reveal" style={{ '--rd': '320ms' }}>
+          云图 · YUNTU<span className="sep">·</span>JOSH<span className="sep">·</span>2026.04.26
+          <br />
+          DRAFT v0.1<span className="sep">·</span>A BLUEPRINT IN MOTION
+        </div>
+      </Scene>
+    </>
+  );
+}
+
+Object.assign(window, { ChProductMoments, ChBusiness, ChClosing, AtlasMap, CtaCard });
+
+  </script>
+
+  <script type="text/babel">
+/* global React, ReactDOM, useReveal, Hero, Slate, Scene, ChNaming, ChMoments, ChMarket, ChDefinition, ChWhyNow, ChUsers, ChProductMoments, ChBusiness, ChClosing, useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakSlider, TweakToggle, TweakColor */
+const { useEffect, useState, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#7B9EFF",
+  "fontScale": 100,
+  "starDensity": 1,
+  "showLetterbox": false,
+  "showHud": true,
+  "animStyle": "cinematic"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [chapter, setChapter] = useState({ id: '00', title: '开场' });
+  const [progress, setProgress] = useState(0);
+  const [tc, setTc] = useState('00:00:00:00');
+
+  useReveal();
+
+  // apply tweak vars
+  useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--accent', tweaks.accent);
+    r.style.setProperty('--accent-soft', tweaks.accent + '2e');
+    r.style.setProperty('--accent-glow', tweaks.accent + '8c');
+    r.style.fontSize = `${tweaks.fontScale}%`;
+    if (window.__atlas?.setStarDensity) window.__atlas.setStarDensity(tweaks.starDensity);
+    document.body.classList.toggle('letterboxed', !!tweaks.showLetterbox);
+    document.body.classList.toggle('no-hud', !tweaks.showHud);
+  }, [tweaks]);
+
+  // chapter detection + progress + timecode
+  useEffect(() => {
+    let raf;
+    const update = () => {
+      const all = document.querySelectorAll('[data-chapter]');
+      const mid = window.innerHeight * 0.45;
+      let active = null;
+      all.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top <= mid && r.bottom >= 0) active = el;
+      });
+      if (active) {
+        const id = active.getAttribute('data-chapter');
+        const t = active.getAttribute('data-title');
+        setChapter({ id, title: t });
+      }
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = Math.max(0, Math.min(1, window.scrollY / Math.max(1, max)));
+      setProgress(p);
+      // timecode like a film
+      const total = 600; // 10 minutes virtual film
+      const sec = p * total;
+      const hh = Math.floor(sec / 3600);
+      const mm = Math.floor((sec % 3600) / 60);
+      const ss = Math.floor(sec % 60);
+      const ff = Math.floor((sec - Math.floor(sec)) * 24);
+      setTc(`${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}:${String(ff).padStart(2, '0')}`);
+    };
+    const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
+  }, []);
+
+  return (
+    <>
+      {tweaks.showHud && (
+        <div className="hud-top">
+          <div className="left">
+            <span className="hud-dot"></span>
+            <span>REC · ATLAS</span>
+          </div>
+          <div className="right">
+            <span>{tc}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="stage">
+        <Hero />
+        <ChNaming />
+        <ChMoments />
+        <ChMarket />
+        <ChDefinition />
+        <ChWhyNow />
+        <ChUsers />
+        <ChProductMoments />
+        <ChBusiness />
+        <ChClosing />
+      </div>
+
+      <div className="subtitle-bar">
+        <span className="ch-num">CH · {chapter.id}</span>
+        <span className="ch-title">{chapter.title}</span>
+      </div>
+      <div className="progress-rail">
+        <div className="progress-fill" style={{ width: `${progress * 100}%` }}></div>
+      </div>
+
+      {tweaks.showLetterbox && <>
+        <div className="letterbox-top"></div>
+        <div className="letterbox-bottom"></div>
+      </>}
+
+      <TweaksPanel title="Tweaks · ATLAS">
+        <TweakSection label="VISUAL" />
+        <TweakColor label="Accent" value={tweaks.accent}
+          onChange={(v) => setTweak('accent', v)} />
+        <TweakSlider label="Font scale" value={tweaks.fontScale}
+          min={80} max={130} step={5} unit="%"
+          onChange={(v) => setTweak('fontScale', v)} />
+        <TweakSlider label="Star density" value={tweaks.starDensity}
+          min={0.2} max={2.5} step={0.1}
+          onChange={(v) => setTweak('starDensity', v)} />
+        <TweakSection label="CINEMA" />
+        <TweakToggle label="Letterbox bars" value={tweaks.showLetterbox}
+          onChange={(v) => setTweak('showLetterbox', v)} />
+        <TweakToggle label="Top HUD (timecode)" value={tweaks.showHud}
+          onChange={(v) => setTweak('showHud', v)} />
+      </TweaksPanel>
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+  </script>
+
+</body>
+</html>
