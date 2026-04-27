@@ -1,0 +1,1856 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>云图 Atlas — Brand Manual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000005;
+      --bg-soft: #08091a;
+      --fg: #f4f5fb;
+      --fg-dim: rgba(244, 245, 251, 0.62);
+      --fg-faint: rgba(244, 245, 251, 0.32);
+      --line: rgba(244, 245, 251, 0.12);
+      --line-strong: rgba(244, 245, 251, 0.22);
+      --accent: #7B9EFF;
+      --accent-soft: rgba(123, 158, 255, 0.18);
+      --accent-glow: rgba(123, 158, 255, 0.55);
+      --warn: #FFB87A;
+      --font-sans: 'PingFang SC', 'PingFang TC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+    body {
+      background-image:
+        radial-gradient(ellipse at 20% -10%, rgba(123,158,255,0.10), transparent 60%),
+        radial-gradient(ellipse at 90% 100%, rgba(123,158,255,0.06), transparent 50%),
+        linear-gradient(rgba(123,158,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(123,158,255,0.04) 1px, transparent 1px);
+      background-size: auto, auto, 56px 56px, 56px 56px;
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+
+    /* HUD */
+    .hud {
+      position: fixed; top: 14px; left: 16px; right: 16px; z-index: 50;
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--fg-faint); pointer-events: none;
+    }
+    .hud .left { display: flex; align-items: center; gap: 8px; }
+    .hud .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Layout */
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 80px 24px 120px;
+    }
+    @media (min-width: 720px) {
+      .wrap { padding: 96px 56px 140px; }
+    }
+
+    .cover {
+      margin-bottom: 96px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .eyebrow::before {
+      content: ""; width: 28px; height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .cover h1 {
+      font-size: clamp(48px, 9vw, 84px);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      line-height: 1.05;
+      margin: 0 0 24px;
+      text-wrap: balance;
+    }
+    .cover .lead {
+      font-size: 18px;
+      color: var(--fg-dim);
+      max-width: 540px;
+      line-height: 1.75;
+      margin: 0 0 32px;
+    }
+    .cover .meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px 36px;
+      max-width: 480px;
+      margin-top: 36px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .cover .meta dt { color: var(--fg-faint); margin-bottom: 6px; }
+    .cover .meta dd { margin: 0; color: var(--fg); }
+
+    /* Section */
+    section { margin-bottom: 96px; }
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      padding-bottom: 18px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--line);
+    }
+    .sec-head .num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      color: var(--accent);
+    }
+    .sec-head h2 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+    .sec-head .en {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      color: var(--fg-faint);
+      text-transform: uppercase;
+    }
+
+    p { color: var(--fg); font-size: 15px; line-height: 1.85; max-width: 620px; }
+    p.dim { color: var(--fg-dim); }
+    em { color: var(--accent); font-style: normal; font-weight: 500; }
+
+    /* Logo lockup */
+    .logo-stage {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(123,158,255,0.04), rgba(0,0,0,0.4));
+      padding: 64px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .logo-stage::before, .logo-stage::after,
+    .logo-stage .corner-bl, .logo-stage .corner-tr {
+      content: ""; position: absolute; width: 14px; height: 14px;
+      border: 1px solid var(--accent); pointer-events: none;
+    }
+    .logo-stage::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+    .logo-stage::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+    .logo-stage .corner-tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+    .logo-stage .corner-bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+
+    .logo-tagline {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: inline-flex; align-items: center; gap: 12px;
+    }
+    .logo-tagline::before, .logo-tagline::after {
+      content: ""; width: 18px; height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .logo-wordmark {
+      font-size: clamp(72px, 14vw, 112px);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      background: linear-gradient(180deg, #fff 0%, var(--accent) 130%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 28px rgba(123,158,255,0.18));
+    }
+    .logo-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--fg-dim);
+    }
+
+    .three-meanings {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 32px;
+    }
+    @media (min-width: 720px) {
+      .three-meanings { grid-template-columns: repeat(3, 1fr); }
+    }
+    .meaning {
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+    .meaning .id {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      color: var(--accent);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .meaning .name {
+      font-size: 17px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .meaning .desc {
+      font-size: 13px;
+      color: var(--fg-dim);
+      line-height: 1.7;
+    }
+
+    /* Color palette */
+    .swatches {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 720px) {
+      .swatches { grid-template-columns: repeat(2, 1fr); }
+    }
+    .swatch {
+      border: 1px solid var(--line);
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+    .swatch .chip {
+      width: 56px; height: 56px;
+      border: 1px solid var(--line-strong);
+      position: relative;
+    }
+    .swatch .chip.glow { box-shadow: 0 0 24px var(--accent-glow), inset 0 0 0 1px rgba(255,255,255,0.06); }
+    .swatch .info .name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--fg-faint);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .swatch .info .label {
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .swatch .hex {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--fg-dim);
+      text-align: right;
+    }
+
+    /* Type specimens */
+    .type-specimen {
+      border: 1px solid var(--line);
+      padding: 28px 24px;
+      margin-bottom: 18px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: end;
+    }
+    @media (min-width: 720px) {
+      .type-specimen { grid-template-columns: 1fr auto; }
+    }
+    .type-specimen .sample {
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+    .type-specimen .meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--fg-faint);
+      text-transform: uppercase;
+      text-align: left;
+    }
+    @media (min-width: 720px) {
+      .type-specimen .meta { text-align: right; }
+    }
+    .type-specimen .meta b { color: var(--accent); font-weight: 500; }
+
+    .stack-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--fg-dim);
+      padding: 14px 18px;
+      background: rgba(123,158,255,0.04);
+      border: 1px dashed var(--line);
+      margin: 8px 0 24px;
+      word-break: break-all;
+    }
+
+    .scale {
+      display: flex; flex-direction: column; gap: 12px;
+      border: 1px solid var(--line); padding: 22px 24px;
+      margin-top: 16px;
+    }
+    .scale-row {
+      display: grid;
+      grid-template-columns: 88px 1fr auto;
+      gap: 18px; align-items: baseline;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    .scale-row:last-child { border-bottom: 0; }
+    .scale-row .tag {
+      font-family: var(--font-mono);
+      font-size: 9px; letter-spacing: 0.22em; color: var(--accent);
+      text-transform: uppercase;
+    }
+    .scale-row .value {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.14em;
+      color: var(--fg-faint); text-align: right;
+    }
+
+    /* Voice */
+    .voice-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border: 1px solid var(--line);
+    }
+    @media (min-width: 720px) {
+      .voice-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .voice-cell {
+      padding: 24px 22px;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .voice-cell:last-child { border-bottom: 0; }
+    @media (min-width: 720px) {
+      .voice-cell:nth-child(odd) { border-right: 1px solid var(--line); }
+      .voice-cell:nth-child(n+3) { border-top: 1px solid var(--line); }
+    }
+    .voice-cell .label {
+      font-family: var(--font-mono);
+      font-size: 9px; letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .voice-cell.do .label { color: var(--accent); }
+    .voice-cell.dont .label { color: var(--warn); }
+    .voice-cell ul {
+      margin: 0; padding: 0; list-style: none;
+      font-size: 14px; line-height: 1.7; color: var(--fg);
+    }
+    .voice-cell li {
+      padding: 6px 0 6px 18px; position: relative;
+    }
+    .voice-cell.do li::before {
+      content: "+"; color: var(--accent);
+      position: absolute; left: 0; font-family: var(--font-mono);
+    }
+    .voice-cell.dont li::before {
+      content: "−"; color: var(--warn);
+      position: absolute; left: 0; font-family: var(--font-mono);
+    }
+    .voice-cell li em { color: var(--fg-dim); font-weight: 400; font-style: italic; }
+
+    /* Motion */
+    .motion-card {
+      border: 1px solid var(--line);
+      padding: 22px 24px;
+      margin-bottom: 14px;
+    }
+    .motion-card .head {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .motion-card .name {
+      font-size: 16px; font-weight: 500;
+    }
+    .motion-card .timing {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.16em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .motion-card .desc {
+      font-size: 13px; color: var(--fg-dim); line-height: 1.7;
+    }
+
+    /* Components mini gallery */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 720px) {
+      .comp-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .comp-tile {
+      border: 1px solid var(--line);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 200px;
+      justify-content: space-between;
+    }
+    .comp-tile .label {
+      font-family: var(--font-mono);
+      font-size: 9px; letter-spacing: 0.26em;
+      color: var(--fg-faint); text-transform: uppercase;
+    }
+    /* mock components */
+    .demo-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.32em;
+      text-transform: uppercase; color: var(--accent);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .demo-eyebrow::before {
+      content: ""; width: 24px; height: 1px;
+      background: var(--accent); box-shadow: 0 0 8px var(--accent-glow);
+    }
+    .demo-quote {
+      border-left: 1px solid var(--accent);
+      padding: 4px 0 4px 14px;
+      font-size: 14px; line-height: 1.7;
+    }
+    .demo-quote .en {
+      display: block; margin-top: 8px;
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.06em; color: var(--fg-dim);
+    }
+    .demo-cta {
+      border: 1px solid var(--accent);
+      padding: 18px 16px;
+      background: linear-gradient(180deg, rgba(123,158,255,0.06), rgba(0,0,0,0.5));
+      position: relative;
+    }
+    .demo-cta::before, .demo-cta::after {
+      content: ""; position: absolute; width: 12px; height: 12px;
+      border: 1px solid var(--accent);
+    }
+    .demo-cta::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+    .demo-cta::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+    .demo-cta .l {
+      font-family: var(--font-mono); font-size: 9px;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 8px;
+    }
+    .demo-cta .h {
+      font-family: var(--font-mono); font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+    .demo-stat {
+      display: grid; grid-template-columns: 36px 1fr;
+      gap: 14px; padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .demo-stat .num {
+      font-family: var(--font-mono); font-size: 10px;
+      letter-spacing: 0.18em; color: var(--accent);
+    }
+    .demo-stat .name {
+      font-size: 14px; font-weight: 500;
+    }
+    .demo-stat .desc {
+      font-size: 12px; color: var(--fg-dim);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 80px;
+      padding-top: 36px;
+      border-top: 1px solid var(--line);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      line-height: 2;
+    }
+    footer .sep { color: var(--accent); margin: 0 8px; }
+
+    /* Atlas glyph */
+    .atlas-mark {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 80px; height: 80px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+    .atlas-mark::before {
+      content: ""; position: absolute; inset: 12px;
+      border: 1px solid var(--accent-soft);
+      border-radius: 50%;
+    }
+    .atlas-mark::after {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .quote-block {
+      border-left: 1px solid var(--accent);
+      padding: 12px 0 12px 24px;
+      margin: 28px 0;
+      font-size: 17px; line-height: 1.7;
+      max-width: 620px;
+    }
+    .quote-block .en {
+      display: block; margin-top: 14px;
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.06em;
+      color: var(--fg-dim); text-transform: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hud">
+    <div class="left">
+      <span class="dot"></span>
+      <span>BRAND · ATLAS · v0.1</span>
+    </div>
+    <div class="right">DESIGN MANUAL</div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- COVER -->
+    <header class="cover">
+      <div class="eyebrow">BRAND DESIGN MANUAL</div>
+      <h1>云图 Atlas<br>品牌设计手册</h1>
+      <p class="lead">
+        这是一份关于「云图」如何看、如何说、如何动的小册子。它不规定一切——它划出一条边界，让所有围绕云图的设计、文案、产品、传播，都能落在同一片夜空之下。
+      </p>
+
+      <div style="margin: 36px 0;">
+        <div class="atlas-mark"></div>
+      </div>
+
+      <dl class="meta">
+        <div><dt>BRAND</dt><dd>云图 · ATLAS</dd></div>
+        <div><dt>POSITIONING</dt><dd>AI Launchpad</dd></div>
+        <div><dt>VERSION</dt><dd>v0.1 · Draft</dd></div>
+        <div><dt>AUTHOR</dt><dd>Josh · 2026</dd></div>
+      </dl>
+    </header>
+
+    <!-- 01 BRAND ESSENCE -->
+    <section>
+      <div class="sec-head">
+        <span class="num">01</span>
+        <h2>品牌内核</h2>
+        <span class="en">ESSENCE · WHO WE ARE</span>
+      </div>
+
+      <p><em>云图（Atlas）</em>是一个为中文 AI 用户提供「发现、试用、交流」的平台，服务三类人——做产品的 indie 开发者、解决具体问题的普通用户、追踪趋势的高密度信息消费者。</p>
+      <p class="dim">它不是工具目录，是一张<em>正在被绘制</em>中的世界地图。</p>
+
+      <div class="quote-block">
+        我们的生命从不只属于自己——每一次善意的举动，都会化作涟漪，穿越世界，穿越时间。
+        <span class="en">"Our lives are not our own. By each act of kindness, we ripple across the world and through time."</span>
+      </div>
+
+      <div class="three-meanings">
+        <div class="meaning">
+          <span class="id">01 · MAP</span>
+          <div class="name">地图集</div>
+          <div class="desc">把整个世界系统地铺展开来；可被检索、可被穿越、可被重绘。</div>
+        </div>
+        <div class="meaning">
+          <span class="id">02 · TITAN</span>
+          <div class="name">擎天巨人</div>
+          <div class="desc">希腊神话中肩扛苍穹的 Atlas；以一己之身托起世界。</div>
+        </div>
+        <div class="meaning">
+          <span class="id">03 · FILM</span>
+          <div class="name">电影《云图》</div>
+          <div class="desc">六段时空，一张隐形地图——每一次善意都化作涟漪。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 LOGO -->
+    <section>
+      <div class="sec-head">
+        <span class="num">02</span>
+        <h2>主标识</h2>
+        <span class="en">LOGO · WORDMARK</span>
+      </div>
+
+      <p>主标识是一组三层叠加的 Wordmark：定位线、主词、英文副名。三层共同构成完整识别——单独使用任何一层都不被推荐，除非空间极度受限。</p>
+
+      <div class="logo-stage" style="padding:48px 32px;">
+        <span class="corner-bl"></span>
+        <span class="corner-tr"></span>
+        <img src="uploads/品牌形象.png" alt="Atlas 品牌形象"
+             style="max-width:min(400px,72vw);height:auto;display:block;
+                    filter:invert(1) brightness(0.9);"/>
+      </div>
+
+      <!-- light version -->
+      <div style="border:1px solid var(--line);padding:48px 32px;display:flex;justify-content:center;
+                  background:#f5f5f5;margin-top:14px;position:relative;">
+        <img src="uploads/品牌形象.png" alt="Atlas 品牌形象 · 白底"
+             style="max-width:min(400px,72vw);height:auto;display:block;"/>
+        <span style="position:absolute;bottom:10px;right:14px;font-family:'JetBrains Mono',monospace;
+               font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(0,0,0,0.35);">LIGHT MODE</span>
+      </div>
+
+      <div class="scale">
+        <div class="scale-row">
+          <span class="tag">L1 · TAGLINE</span>
+          <span>AI LAUNCHPAD（产品定位标）</span>
+          <span class="value">MONO · 12 / 0.4em</span>
+        </div>
+        <div class="scale-row">
+          <span class="tag">L2 · MARK</span>
+          <span>云图（主词，渐变文字 #fff → 主色）</span>
+          <span class="value">SANS · 500 / 0.08em</span>
+        </div>
+        <div class="scale-row">
+          <span class="tag">L3 · ENDORSE</span>
+          <span>ATLAS · A MAP OF THE AI WORLD</span>
+          <span class="value">MONO · 11 / 0.4em</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 COLOR -->
+    <section>
+      <div class="sec-head">
+        <span class="num">03</span>
+        <h2>色彩系统</h2>
+        <span class="en">COLOR · DEEP SPACE PALETTE</span>
+      </div>
+
+      <p>云图的底色是<em>夜空</em>——近乎纯黑、带极轻微的蓝。点缀色是<em>星蓝</em>——一种带辉光的、未来主义的冷蓝。整套配色追求<em>寂静与可读</em>，所有强调通过辉光实现，而不是高饱和。</p>
+
+      <div class="swatches">
+        <div class="swatch">
+          <div class="chip" style="background:#000005"></div>
+          <div class="info"><div class="name">SPACE · BG</div><div class="label">底色 / Deep Space</div></div>
+          <div class="hex">#000005</div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#08091a"></div>
+          <div class="info"><div class="name">NIGHT · SOFT</div><div class="label">柔色面 / Soft Layer</div></div>
+          <div class="hex">#08091a</div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#7B9EFF" class="glow"></div>
+          <div class="info"><div class="name">STAR · ACCENT</div><div class="label">主色 · 星蓝</div></div>
+          <div class="hex">#7B9EFF</div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#FFB87A"></div>
+          <div class="info"><div class="name">FLARE · WARN</div><div class="label">警示 / 罕用</div></div>
+          <div class="hex">#FFB87A</div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f4f5fb"></div>
+          <div class="info"><div class="name">LIGHT · FG</div><div class="label">主文字 / Foreground</div></div>
+          <div class="hex">#f4f5fb</div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:rgba(244,245,251,0.32);border-color:var(--line-strong)"></div>
+          <div class="info"><div class="name">FG · FAINT</div><div class="label">辅助文字 / 32%</div></div>
+          <div class="hex">rgba(244,245,251,.32)</div>
+        </div>
+      </div>
+
+      <p class="dim" style="margin-top:24px">辅助透明度：62% (dim) · 32% (faint) · 12% (line) · 22% (line-strong)。所有边线、分隔均使用透明白叠加，从不引入新色。</p>
+
+      <h3 style="font-size:14px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--fg-dim);margin-top:36px">辉光规则 · GLOW</h3>
+      <p>主色 <em>#7B9EFF</em> 在三种透明度下使用：</p>
+      <ul style="font-size:14px;line-height:1.9;color:var(--fg);padding-left:0;list-style:none">
+        <li><span style="font-family:var(--font-mono);color:var(--accent)">·</span> <b>0.55</b> — accent-glow，用于 box-shadow / text-shadow / drop-shadow 辉光投射</li>
+        <li><span style="font-family:var(--font-mono);color:var(--accent)">·</span> <b>0.18</b> — accent-soft，用于背景/内描边的低饱和点缀</li>
+        <li><span style="font-family:var(--font-mono);color:var(--accent)">·</span> <b>0.06</b> — 网格线、超低饱和背景图层</li>
+      </ul>
+    </section>
+
+    <!-- 04 TYPE -->
+    <section>
+      <div class="sec-head">
+        <span class="num">04</span>
+        <h2>字体系统</h2>
+        <span class="en">TYPE · DUAL VOICE</span>
+      </div>
+
+      <p>云图使用<em>双声道</em>字体策略：中文（含正文叙事）使用<em>苹方</em>系——克制、当代、毫无装饰；英文与所有元数据/标签使用<em>JetBrains Mono</em>——等宽、终端、技术感。两种字体共同营造"电影 × 终端"的并置叙事。</p>
+
+      <div class="stack-label">
+        SANS · 'PingFang SC', 'PingFang TC', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif
+      </div>
+      <div class="stack-label">
+        MONO · 'JetBrains Mono', 'SF Mono', 'IBM Plex Mono', Menlo, monospace
+      </div>
+
+      <div class="type-specimen">
+        <div class="sample" style="font-size:64px;font-weight:600;letter-spacing:0.04em">云图</div>
+        <div class="meta"><b>DISPLAY</b><br>PingFang · 600 · 0.04em</div>
+      </div>
+      <div class="type-specimen">
+        <div class="sample" style="font-size:36px;font-weight:600;letter-spacing:0.03em;line-height:1.2">一张地图，从第一个坐标开始画。</div>
+        <div class="meta"><b>HEAD</b><br>PingFang · 600 · 0.03em</div>
+      </div>
+      <div class="type-specimen">
+        <div class="sample" style="font-size:18px;line-height:1.7;font-weight:400;letter-spacing:0.02em;max-width:520px">让创造的人被看见，让寻找的人找到答案——云图不是工具目录，它是一张正在被绘制中的世界地图。</div>
+        <div class="meta"><b>BODY</b><br>PingFang · 400 · 1.7</div>
+      </div>
+      <div class="type-specimen">
+        <div class="sample" style="font-family:var(--font-mono);font-size:24px;letter-spacing:0.08em">ATLAS · 2026</div>
+        <div class="meta"><b>MONO · L</b><br>JetBrains · 400 · 0.08em</div>
+      </div>
+      <div class="type-specimen">
+        <div class="sample" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:var(--accent)">// SYSTEM BOOT · 2026</div>
+        <div class="meta"><b>MONO · S</b><br>JetBrains · 400 · 0.32em</div>
+      </div>
+    </section>
+
+    <!-- 05 MOTION -->
+    <section>
+      <div class="sec-head">
+        <span class="num">05</span>
+        <h2>动效语言</h2>
+        <span class="en">MOTION · A FILM IN MOTION</span>
+      </div>
+
+      <p>云图的动效遵循<em>电影感</em>——慢、有重量、有迟滞、避免回弹。所有过渡都基于「<em>缓出</em>」（ease-out）的非对称曲线；所有进入都伴随轻微 Y 轴下沉到归位（28px），让画面像胶片掠过印刻而成。</p>
+
+      <div class="motion-card">
+        <div class="head">
+          <span class="name">REVEAL · 主入场</span>
+          <span class="timing">1200ms · cubic-bezier(.2,.7,.2,1)</span>
+        </div>
+        <div class="desc">translateY(28px) + opacity 0 → 归位 + opacity 1。带 staggered delay 60–500ms。所有正文、标题、卡片均使用此动效。</div>
+      </div>
+      <div class="motion-card">
+        <div class="head">
+          <span class="name">FADE-ONLY · 纯渐显</span>
+          <span class="timing">1600ms · ease-out</span>
+        </div>
+        <div class="desc">仅透明度变化，不带位移。用于 Hero 主词、引用、字幕等需要"轻盈出现"的场景。</div>
+      </div>
+      <div class="motion-card">
+        <div class="head">
+          <span class="name">BLUR-IN · 失焦聚焦</span>
+          <span class="timing">1400ms · ease-out</span>
+        </div>
+        <div class="desc">blur(12px) + opacity 0 + Y(20px) → 归位。用于章节首屏，营造电影从模糊聚焦的镜头感。</div>
+      </div>
+      <div class="motion-card">
+        <div class="head">
+          <span class="name">PULSE · 心跳</span>
+          <span class="timing">2000ms · ease-in-out infinite</span>
+        </div>
+        <div class="desc">微小的明灭（0.4 → 1 → 0.4）+ scale (0.85 → 1)。仅用于状态指示点（HUD 的 REC 圆点）。</div>
+      </div>
+      <div class="motion-card">
+        <div class="head">
+          <span class="name">CONVERGE · 汇聚</span>
+          <span class="timing">~3200ms · ease-in-out</span>
+        </div>
+        <div class="desc">点云从随机散点 → 目标位置（圆环）→ 邻近点连线。专属动效，仅出现在结尾的 Atlas 星图。</div>
+      </div>
+    </section>
+
+    <!-- 06 COMPONENTS -->
+    <section>
+      <div class="sec-head">
+        <span class="num">06</span>
+        <h2>视觉组件</h2>
+        <span class="en">COMPONENTS · CORE PATTERNS</span>
+      </div>
+
+      <p>云图刻意保持极少量的视觉语汇。所有界面由这几个原子化组件组合而成。它们共享相同的角度（<em>0 圆角</em>）、相同的边线（<em>1px hairline</em>）和相同的辉光逻辑。</p>
+
+      <div class="comp-grid">
+        <div class="comp-tile">
+          <div class="label">EYEBROW · 章节小标</div>
+          <div class="demo-eyebrow">三个真实的瞬间</div>
+        </div>
+
+        <div class="comp-tile">
+          <div class="label">QUOTE · 引用 / 台词</div>
+          <div class="demo-quote">
+            一张地图，从第一个坐标开始画。
+            <span class="en">"FROM THE FIRST COORDINATE."</span>
+          </div>
+        </div>
+
+        <div class="comp-tile">
+          <div class="label">CTA · 行动卡片（带 L 角）</div>
+          <div class="demo-cta">
+            <div class="l">JOIN · FELLOW TRAVELERS</div>
+            <div class="h">Kindajoshua2020</div>
+          </div>
+        </div>
+
+        <div class="comp-tile">
+          <div class="label">ROW · 编号列表行</div>
+          <div>
+            <div class="demo-stat">
+              <span class="num">01</span>
+              <div>
+                <div class="name">少数派的内容深度</div>
+                <div class="desc">精选 + 深度评测，有 taste。</div>
+              </div>
+            </div>
+            <div class="demo-stat">
+              <span class="num">02</span>
+              <div>
+                <div class="name">豌豆荚的发现体验</div>
+                <div class="desc">场景化分类，普通人也能找到工具。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="dim" style="margin-top:24px">所有组件都建立在 1px 上：边线、分隔、装饰角、进度条均为 1px。规则是简单的——<em>从不超过 1px</em>，除非用于辉光。</p>
+    </section>
+
+    <!-- 07 VOICE -->
+    <section>
+      <div class="sec-head">
+        <span class="num">07</span>
+        <h2>语调原则</h2>
+        <span class="en">VOICE · HOW WE TALK</span>
+      </div>
+
+      <p>云图的文字是<em>克制的</em>——它不喊叫、不感叹、不做承诺。它陈述事实、引用台词、用电影感的中英对照展开节奏。每一段文字都应能被放入字幕条而不显违和。</p>
+
+      <div class="voice-grid">
+        <div class="voice-cell do">
+          <div class="label">DO · 这样写</div>
+          <ul>
+            <li>说人话，少用商业黑话<em>（"被发现的地方" 而不是 "增长触点"）</em></li>
+            <li>用<em>具体瞬间</em>替代抽象概念<em>（"周二晚上 23:47"）</em></li>
+            <li>中英并置，营造电影台词感<em>（中文台词 + 英文 caption）</em></li>
+            <li>留白，让句子单独出现<em>（一句话一行，独占一段）</em></li>
+            <li>尊重读者智商<em>，不解释显而易见的事</em></li>
+          </ul>
+        </div>
+        <div class="voice-cell dont">
+          <div class="label">DON'T · 不要这样</div>
+          <ul>
+            <li>感叹号、表情符号<em>（除非必须，几乎不用）</em></li>
+            <li>"赋能"、"重塑"、"颠覆"等空词</li>
+            <li>过长复合句、堆砌形容词</li>
+            <li>渐变色、霓虹紫粉、广告体配色</li>
+            <li>圆角、不必要的阴影、霓虹毛玻璃<em>（App 层内的毛玻璃见第 09 节规范）</em></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 USAGE -->
+    <section>
+      <div class="sec-head">
+        <span class="num">08</span>
+        <h2>使用守则</h2>
+        <span class="en">USAGE · GUARDRAILS</span>
+      </div>
+
+      <p>本品牌系统是<em>开放的</em>，但有几条不能动的红线——它们决定了云图被一眼认出的能力。</p>
+
+      <div class="three-meanings" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="meaning">
+          <span class="id">01 · ALWAYS</span>
+          <div class="name">白天模式为主</div>
+          <div class="desc">默认使用白底 + 黑色标识，类似 App Store 风格；深色底仅在夜间模式或深色背景环境下使用。</div>
+        </div>
+        <div class="meaning">
+          <span class="id">02 · ALWAYS</span>
+          <div class="name">永远 0 圆角</div>
+          <div class="desc">所有容器、卡片、按钮一律方角。圆角属于消费产品，不属于云图。</div>
+        </div>
+        <div class="meaning">
+          <span class="id">03 · ALWAYS</span>
+          <div class="name">永远 1px</div>
+          <div class="desc">所有线条、边框、分隔均为 1px hairline。粗线属于广告，不属于云图。</div>
+        </div>
+        <div class="meaning">
+          <span class="id">04 · NEVER</span>
+          <div class="name">不引入新色</div>
+          <div class="desc">只用本手册定义的 6 种色 + 透明度变体。新色需要重新版次审定。</div>
+        </div>
+        <div class="meaning">
+          <span class="id">05 · NEVER</span>
+          <div class="name">不堆砌 emoji</div>
+          <div class="desc">如必须传达状态，使用方块符号（▮ · ▢ · ◌ · ✓ · ⧉）替代 emoji。</div>
+        </div>
+        <div class="meaning">
+          <span class="id">06 · NEVER</span>
+          <div class="name">不旋转/倾斜文字</div>
+          <div class="desc">所有文字保持水平。倾斜版式属于潮牌，不属于地图集。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 FROSTED GLASS · APP SPEC -->
+    <section>
+      <div class="sec-head">
+        <span class="num">09</span>
+        <h2>毛玻璃规范</h2>
+        <span class="en">FROSTED GLASS · APP UI SPEC</span>
+      </div>
+
+      <p>在 App 界面中，毛玻璃（<em>backdrop-filter: blur</em>）承担「层次感」与「深度」的视觉职责——它让浮层、导航、标签栏与下层内容产生清晰的 Z 轴分离，同时保持内容的上下文感知。云图 App 使用<em>冷蓝色调</em>的毛玻璃，而不是系统默认的暖白或中性灰。</p>
+
+      <style>
+        /* Glass layer demos */
+        .glass-scene {
+          position: relative;
+          border: 1px solid var(--line);
+          overflow: hidden;
+          background:
+            radial-gradient(ellipse at 30% 40%, rgba(123,158,255,0.22) 0%, transparent 55%),
+            radial-gradient(ellipse at 75% 70%, rgba(100,180,255,0.14) 0%, transparent 45%),
+            linear-gradient(145deg, #04050f 0%, #080c20 100%);
+          min-height: 220px;
+        }
+        .glass-scene .scene-img-placeholder {
+          position: absolute; inset: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.22em;
+          color: rgba(123,158,255,0.25); text-transform: uppercase;
+          pointer-events: none;
+        }
+        .glass-layer {
+          position: relative;
+          backdrop-filter: blur(var(--blur, 20px)) saturate(var(--sat, 140%));
+          -webkit-backdrop-filter: blur(var(--blur, 20px)) saturate(var(--sat, 140%));
+          background: var(--glass-bg, rgba(8,9,26,0.55));
+          border: 1px solid var(--glass-border, rgba(123,158,255,0.18));
+        }
+        /* Navbar glass */
+        .demo-navbar {
+          --blur: 28px; --sat: 160%;
+          --glass-bg: rgba(5,6,18,0.62);
+          --glass-border: rgba(123,158,255,0.14);
+          position: absolute; top: 0; left: 0; right: 0;
+          padding: 14px 18px 12px;
+          display: flex; align-items: center; justify-content: space-between;
+          border-top: 0; border-left: 0; border-right: 0;
+          border-bottom: 1px solid rgba(123,158,255,0.12);
+        }
+        .demo-navbar .nav-title {
+          font-size: 17px; font-weight: 600; letter-spacing: 0.02em;
+        }
+        .demo-navbar .nav-back {
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.18em; color: var(--accent);
+          text-transform: uppercase; display: flex; align-items: center; gap: 6px;
+        }
+        .demo-navbar .nav-back::before {
+          content: "‹"; font-size: 16px; font-family: sans-serif; line-height: 1;
+        }
+        .demo-navbar .nav-action {
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.18em; color: var(--accent); text-transform: uppercase;
+        }
+        /* Card glass */
+        .demo-glass-card {
+          --blur: 24px; --sat: 150%;
+          --glass-bg: rgba(10,12,28,0.58);
+          --glass-border: rgba(123,158,255,0.2);
+          padding: 18px 20px; border-radius: 0;
+          margin: 0 18px;
+        }
+        .demo-glass-card .card-label {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.28em; color: var(--accent);
+          text-transform: uppercase; margin-bottom: 6px;
+        }
+        .demo-glass-card .card-title {
+          font-size: 15px; font-weight: 600; line-height: 1.4; margin-bottom: 4px;
+        }
+        .demo-glass-card .card-sub {
+          font-size: 12px; color: var(--fg-dim); letter-spacing: 0.02em;
+        }
+        /* Tab bar glass */
+        .demo-tabbar {
+          --blur: 32px; --sat: 180%;
+          --glass-bg: rgba(4,5,16,0.72);
+          --glass-border: rgba(123,158,255,0.14);
+          position: absolute; bottom: 0; left: 0; right: 0;
+          padding: 10px 0 12px;
+          display: flex; align-items: center; justify-content: space-around;
+          border-top: 1px solid rgba(123,158,255,0.1);
+          border-bottom: 0; border-left: 0; border-right: 0;
+        }
+        .demo-tabbar .tab-item {
+          display: flex; flex-direction: column; align-items: center; gap: 4px;
+          font-family: var(--font-mono); font-size: 8px;
+          letter-spacing: 0.18em; text-transform: uppercase;
+          color: var(--fg-faint); flex: 1;
+        }
+        .demo-tabbar .tab-item.active { color: var(--accent); }
+        .demo-tabbar .tab-icon {
+          width: 22px; height: 22px;
+          border: 1px solid currentColor;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 9px; opacity: 0.8;
+        }
+        .demo-tabbar .tab-item.active .tab-icon {
+          background: rgba(123,158,255,0.14);
+          box-shadow: 0 0 12px rgba(123,158,255,0.28);
+        }
+        /* Sheet glass */
+        .demo-sheet {
+          --blur: 36px; --sat: 170%;
+          --glass-bg: rgba(8,10,22,0.76);
+          --glass-border: rgba(123,158,255,0.22);
+          position: absolute; bottom: 0; left: 0; right: 0;
+          padding: 20px 20px 24px;
+          border-top: 1px solid rgba(123,158,255,0.18);
+          border-bottom: 0; border-left: 0; border-right: 0;
+        }
+        .demo-sheet .sheet-handle {
+          width: 32px; height: 3px;
+          background: rgba(123,158,255,0.3);
+          margin: 0 auto 14px;
+        }
+        .demo-sheet .sheet-title {
+          font-size: 15px; font-weight: 600; margin-bottom: 6px;
+        }
+        .demo-sheet .sheet-desc {
+          font-size: 12px; color: var(--fg-dim); line-height: 1.6;
+        }
+        .demo-sheet .sheet-btn {
+          margin-top: 14px;
+          border: 1px solid var(--accent);
+          padding: 10px 16px;
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.22em; text-transform: uppercase;
+          color: var(--accent);
+          background: rgba(123,158,255,0.08);
+          display: inline-block;
+        }
+
+        /* Spec table */
+        .glass-spec-table {
+          width: 100%; border-collapse: collapse;
+          margin-top: 32px;
+          font-size: 13px;
+        }
+        .glass-spec-table th {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.26em; text-transform: uppercase;
+          color: var(--accent); font-weight: 400;
+          border-bottom: 1px solid var(--line);
+          padding: 10px 14px 10px 0; text-align: left;
+        }
+        .glass-spec-table td {
+          padding: 12px 14px 12px 0;
+          border-bottom: 1px dashed var(--line);
+          vertical-align: top; line-height: 1.6;
+        }
+        .glass-spec-table tr:last-child td { border-bottom: 0; }
+        .glass-spec-table .mono-val {
+          font-family: var(--font-mono); font-size: 11px;
+          letter-spacing: 0.1em; color: var(--accent);
+        }
+        .glass-spec-table td:first-child {
+          font-weight: 500; min-width: 110px;
+        }
+        .glass-spec-table .usage-note {
+          color: var(--fg-dim); font-size: 12px;
+        }
+
+        /* Glass levels legend */
+        .glass-levels {
+          display: grid; grid-template-columns: repeat(4, 1fr);
+          gap: 12px; margin: 28px 0;
+        }
+        .glass-level-card {
+          border: 1px solid var(--line);
+          padding: 16px 14px;
+        }
+        .glass-level-card .swatch-row {
+          height: 48px; margin-bottom: 12px;
+          background:
+            linear-gradient(135deg, rgba(123,158,255,0.3) 0%, rgba(50,100,200,0.15) 100%);
+          display: flex; align-items: center; justify-content: center;
+          position: relative; overflow: hidden;
+        }
+        .glass-level-card .swatch-row::before {
+          content: ""; position: absolute; inset: 0;
+          background: var(--glass-sample-bg);
+          backdrop-filter: blur(var(--glass-sample-blur));
+          -webkit-backdrop-filter: blur(var(--glass-sample-blur));
+        }
+        .glass-level-card .level-name {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.24em; text-transform: uppercase;
+          color: var(--accent); margin-bottom: 4px;
+        }
+        .glass-level-card .level-val {
+          font-size: 13px; font-weight: 500; margin-bottom: 4px;
+        }
+        .glass-level-card .level-use {
+          font-size: 11px; color: var(--fg-dim); line-height: 1.5;
+        }
+      </style>
+
+      <!-- DEMO 1: Navbar -->
+      <h3 style="font-size:13px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);margin:0 0 12px">01 · 导航栏 Nav Bar</h3>
+      <div class="glass-scene" style="min-height:200px;">
+        <div class="scene-img-placeholder">App Content Background</div>
+        <!-- content behind glass -->
+        <div style="position:absolute;top:70px;left:18px;right:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="height:72px;border:1px solid var(--line);background:rgba(123,158,255,0.06);padding:14px;font-size:13px;font-weight:500">快速视频 · 用 iPhone 拍摄人像</div>
+          <div style="height:56px;border:1px solid var(--line);background:rgba(123,158,255,0.04);padding:12px;font-size:12px;color:var(--fg-dim)">产品功能更新 / 2026.04</div>
+        </div>
+        <div class="demo-navbar glass-layer">
+          <span class="nav-back">返回</span>
+          <span class="nav-title">云图 Atlas</span>
+          <span class="nav-action">分享</span>
+        </div>
+      </div>
+
+      <!-- DEMO 2: Tab Bar -->
+      <h3 style="font-size:13px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);margin:28px 0 12px">02 · 标签栏 Tab Bar</h3>
+      <div class="glass-scene" style="min-height:200px;">
+        <div class="scene-img-placeholder">App Content Background</div>
+        <div style="position:absolute;top:18px;left:18px;right:18px;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:22px;font-weight:600;letter-spacing:0.02em">发现 AI</div>
+          <div style="height:64px;border:1px solid var(--line);background:rgba(123,158,255,0.07);padding:14px;font-size:13px">精选工具 · 本周推荐</div>
+          <div style="height:48px;border:1px solid var(--line);background:rgba(123,158,255,0.04);padding:12px;font-size:12px;color:var(--fg-dim)">社区热帖 · 36 条新内容</div>
+        </div>
+        <div class="demo-tabbar glass-layer">
+          <div class="tab-item active">
+            <div class="tab-icon">◎</div>
+            <span>发现</span>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">▣</div>
+            <span>工具</span>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">◌</div>
+            <span>社区</span>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">◻</div>
+            <span>我的</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEMO 3: Floating Card + Sheet -->
+      <h3 style="font-size:13px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);margin:28px 0 12px">03 · 浮层卡片 &amp; 底部抽屉</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="glass-scene" style="min-height:220px;display:flex;align-items:center;justify-content:center;">
+          <div class="scene-img-placeholder">Card Background</div>
+          <div style="position:relative;z-index:1;width:calc(100% - 36px)">
+            <div class="demo-glass-card glass-layer">
+              <div class="card-label">Quick Video · 快速视频</div>
+              <div class="card-title">用 iPhone 拍摄广角人像</div>
+              <div class="card-sub">▶ 2min · 立即观看</div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-scene" style="min-height:220px;">
+          <div class="scene-img-placeholder">Screen Content</div>
+          <div style="position:absolute;top:20px;left:18px;right:18px;font-size:13px;font-weight:500">加入今日苹果课程</div>
+          <div class="demo-sheet glass-layer">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title">附近正在进行</div>
+            <div class="sheet-desc">今天 15:00 · 摄影入门<br>剩余 3 个席位</div>
+            <div class="sheet-btn">立即报名</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPEC TABLE -->
+      <h3 style="font-size:13px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);margin:40px 0 0">参数规范表</h3>
+
+      <table class="glass-spec-table">
+        <thead>
+          <tr>
+            <th>层级 / 组件</th>
+            <th>blur</th>
+            <th>saturate</th>
+            <th>背景色（rgba）</th>
+            <th>边线</th>
+            <th>使用场景</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>L1 · Nav Bar</td>
+            <td class="mono-val">28px</td>
+            <td class="mono-val">160%</td>
+            <td class="mono-val">rgba(5,6,18,0.62)</td>
+            <td class="mono-val">rgba(123,158,255,0.14)</td>
+            <td class="usage-note">顶部导航栏、页面标题区</td>
+          </tr>
+          <tr>
+            <td>L2 · Tab Bar</td>
+            <td class="mono-val">32px</td>
+            <td class="mono-val">180%</td>
+            <td class="mono-val">rgba(4,5,16,0.72)</td>
+            <td class="mono-val">rgba(123,158,255,0.10)</td>
+            <td class="usage-note">底部标签栏，最高遮蔽度</td>
+          </tr>
+          <tr>
+            <td>L3 · Float Card</td>
+            <td class="mono-val">24px</td>
+            <td class="mono-val">150%</td>
+            <td class="mono-val">rgba(10,12,28,0.58)</td>
+            <td class="mono-val">rgba(123,158,255,0.20)</td>
+            <td class="usage-note">覆盖在媒体内容上的浮层卡片</td>
+          </tr>
+          <tr>
+            <td>L4 · Sheet</td>
+            <td class="mono-val">36px</td>
+            <td class="mono-val">170%</td>
+            <td class="mono-val">rgba(8,10,22,0.76)</td>
+            <td class="mono-val">rgba(123,158,255,0.22)</td>
+            <td class="usage-note">底部抽屉、模态浮层</td>
+          </tr>
+          <tr>
+            <td>L5 · Tooltip</td>
+            <td class="mono-val">16px</td>
+            <td class="mono-val">130%</td>
+            <td class="mono-val">rgba(12,14,30,0.50)</td>
+            <td class="mono-val">rgba(123,158,255,0.16)</td>
+            <td class="usage-note">气泡提示、小浮层</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:24px;padding:18px 20px;border:1px dashed var(--line);background:rgba(123,158,255,0.03)">
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.28em;color:var(--accent);text-transform:uppercase;margin-bottom:10px">CSS Token · 快速引用</div>
+        <pre style="margin:0;font-family:var(--font-mono);font-size:11px;letter-spacing:0.06em;color:var(--fg-dim);line-height:1.9;white-space:pre-wrap">--glass-nav:    blur(28px) saturate(160%);
+--glass-tab:    blur(32px) saturate(180%);
+--glass-card:   blur(24px) saturate(150%);
+--glass-sheet:  blur(36px) saturate(170%);
+--glass-tip:    blur(16px) saturate(130%);
+
+/* 始终搭配 -webkit- 前缀前置 */
+backdrop-filter: var(--glass-nav);
+-webkit-backdrop-filter: var(--glass-nav);</pre>
+      </div>
+
+      <p class="dim" style="margin-top:20px">毛玻璃是<em>Z 轴工具</em>，不是装饰。每个层级的 blur 值与不透明度都经过配对调校——<em>blur 越大，背景遮蔽越重</em>，以保证文字可读性。saturate 增强让星蓝底色穿透玻璃层，维持品牌色感知。</p>
+
+      <!-- ── 亮色模式 ── -->
+      <style>
+        /* Light mode demo scene */
+        .glass-scene-light {
+          position: relative;
+          border: 1px solid rgba(0,0,0,0.08);
+          overflow: hidden;
+          background:
+            radial-gradient(ellipse at 25% 35%, rgba(123,158,255,0.18) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 75%, rgba(180,210,255,0.22) 0%, transparent 45%),
+            linear-gradient(155deg, #eef2ff 0%, #f8faff 60%, #e8f0ff 100%);
+          min-height: 220px;
+        }
+        .glass-scene-light .scene-label-light {
+          position: absolute; inset: 0;
+          display: flex; align-items: center; justify-content: center;
+          font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.22em;
+          color: rgba(80,110,200,0.3); text-transform: uppercase;
+          pointer-events: none;
+        }
+        /* light glass base */
+        .glass-layer-light {
+          position: relative;
+          backdrop-filter: blur(var(--blur-l, 24px)) saturate(var(--sat-l, 160%)) brightness(1.04);
+          -webkit-backdrop-filter: blur(var(--blur-l, 24px)) saturate(var(--sat-l, 160%)) brightness(1.04);
+          background: var(--glass-bg-l, rgba(255,255,255,0.60));
+          border: 1px solid var(--glass-bd-l, rgba(123,158,255,0.22));
+        }
+        /* light navbar */
+        .demo-navbar-light {
+          --blur-l: 28px; --sat-l: 170%;
+          --glass-bg-l: rgba(248,250,255,0.72);
+          --glass-bd-l: rgba(123,158,255,0.16);
+          position: absolute; top: 0; left: 0; right: 0;
+          padding: 14px 18px 12px;
+          display: flex; align-items: center; justify-content: space-between;
+          border-top: 0; border-left: 0; border-right: 0;
+          border-bottom: 1px solid rgba(123,158,255,0.14);
+        }
+        .demo-navbar-light .nav-title { font-size: 17px; font-weight: 600; color: #0a0e1a; }
+        .demo-navbar-light .nav-back {
+          font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
+          color: #5b7ef5; text-transform: uppercase;
+          display: flex; align-items: center; gap: 5px;
+        }
+        .demo-navbar-light .nav-back::before { content: "‹"; font-size: 16px; font-family: sans-serif; }
+        .demo-navbar-light .nav-action {
+          font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em;
+          color: #5b7ef5; text-transform: uppercase;
+        }
+        /* light tab bar */
+        .demo-tabbar-light {
+          --blur-l: 32px; --sat-l: 190%;
+          --glass-bg-l: rgba(245,248,255,0.80);
+          --glass-bd-l: rgba(123,158,255,0.12);
+          position: absolute; bottom: 0; left: 0; right: 0;
+          padding: 10px 0 12px;
+          display: flex; align-items: center; justify-content: space-around;
+          border-top: 1px solid rgba(123,158,255,0.14);
+          border-bottom: 0; border-left: 0; border-right: 0;
+        }
+        .demo-tabbar-light .tab-item-l {
+          display: flex; flex-direction: column; align-items: center; gap: 4px;
+          font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.18em;
+          text-transform: uppercase; color: rgba(10,14,26,0.35); flex: 1;
+        }
+        .demo-tabbar-light .tab-item-l.active { color: #5b7ef5; }
+        .demo-tabbar-light .tab-icon-l {
+          width: 22px; height: 22px;
+          border: 1px solid currentColor;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 9px; opacity: 0.8;
+        }
+        .demo-tabbar-light .tab-item-l.active .tab-icon-l {
+          background: rgba(91,126,245,0.10);
+          box-shadow: 0 0 10px rgba(91,126,245,0.20);
+        }
+        /* light float card */
+        .demo-glass-card-light {
+          --blur-l: 24px; --sat-l: 160%;
+          --glass-bg-l: rgba(255,255,255,0.65);
+          --glass-bd-l: rgba(91,126,245,0.22);
+          padding: 18px 20px; margin: 0 18px;
+        }
+        .demo-glass-card-light .card-label-l {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.28em; color: #5b7ef5;
+          text-transform: uppercase; margin-bottom: 6px;
+        }
+        .demo-glass-card-light .card-title-l { font-size: 15px; font-weight: 600; color: #0a0e1a; margin-bottom: 4px; }
+        .demo-glass-card-light .card-sub-l { font-size: 12px; color: rgba(10,14,26,0.5); }
+        /* light sheet */
+        .demo-sheet-light {
+          --blur-l: 36px; --sat-l: 180%;
+          --glass-bg-l: rgba(246,249,255,0.82);
+          --glass-bd-l: rgba(91,126,245,0.20);
+          position: absolute; bottom: 0; left: 0; right: 0;
+          padding: 20px 20px 24px;
+          border-top: 1px solid rgba(91,126,245,0.18);
+          border-bottom: 0; border-left: 0; border-right: 0;
+        }
+        .demo-sheet-light .sheet-handle-l {
+          width: 32px; height: 3px;
+          background: rgba(91,126,245,0.25);
+          margin: 0 auto 14px;
+        }
+        .demo-sheet-light .sheet-title-l { font-size: 15px; font-weight: 600; color: #0a0e1a; margin-bottom: 6px; }
+        .demo-sheet-light .sheet-desc-l { font-size: 12px; color: rgba(10,14,26,0.5); line-height: 1.6; }
+        .demo-sheet-light .sheet-btn-l {
+          margin-top: 14px;
+          border: 1px solid #5b7ef5;
+          padding: 10px 16px;
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.22em; text-transform: uppercase;
+          color: #5b7ef5; background: rgba(91,126,245,0.07);
+          display: inline-block;
+        }
+
+        /* Light mode spec table accent override */
+        .glass-spec-table-light th { color: #5b7ef5; }
+        .glass-spec-table-light .mono-val-l {
+          font-family: var(--font-mono); font-size: 11px;
+          letter-spacing: 0.1em; color: #5b7ef5;
+        }
+        .glass-spec-table-light td { color: #0a0e1a; border-bottom-color: rgba(0,0,0,0.08); }
+        .glass-spec-table-light .usage-note-l { color: rgba(10,14,26,0.5); font-size: 12px; }
+
+        /* Mode toggle pill */
+        .mode-compare {
+          display: grid; grid-template-columns: 1fr 1fr;
+          gap: 0; border: 1px solid var(--line);
+          margin: 28px 0 0;
+        }
+        .mode-compare-label {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.26em; text-transform: uppercase;
+          padding: 8px 14px;
+          border-bottom: 1px solid var(--line);
+        }
+        .mode-compare-label.dark { color: var(--accent); background: rgba(123,158,255,0.04); }
+        .mode-compare-label.light { color: #5b7ef5; background: rgba(91,126,245,0.04); border-left: 1px solid var(--line); }
+
+        /* Motion spec cards */
+        .glass-motion-grid {
+          display: grid; grid-template-columns: 1fr 1fr;
+          gap: 14px; margin-top: 28px;
+        }
+        @media (max-width: 600px) { .glass-motion-grid { grid-template-columns: 1fr; } }
+        .glass-motion-card {
+          border: 1px solid var(--line);
+          padding: 20px 18px;
+          position: relative; overflow: hidden;
+        }
+        .glass-motion-card::after {
+          content: ""; position: absolute;
+          bottom: 0; left: 0; right: 0; height: 2px;
+          background: linear-gradient(90deg, transparent, var(--accent), transparent);
+          opacity: 0.3;
+        }
+        .glass-motion-card .gm-tag {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.26em; text-transform: uppercase;
+          color: var(--accent); margin-bottom: 8px;
+        }
+        .glass-motion-card .gm-name { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+        .glass-motion-card .gm-timing {
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.14em; color: var(--fg-dim); margin-bottom: 10px;
+        }
+        .glass-motion-card .gm-desc { font-size: 12px; color: var(--fg-dim); line-height: 1.7; }
+        .glass-motion-card .gm-code {
+          margin-top: 12px; padding: 10px 12px;
+          background: rgba(123,158,255,0.04); border: 1px dashed var(--line);
+          font-family: var(--font-mono); font-size: 10px;
+          letter-spacing: 0.06em; color: var(--fg-dim);
+          line-height: 1.8; white-space: pre-wrap;
+        }
+
+        /* Live demo animation */
+        @keyframes glassIn {
+          from { opacity: 0; transform: translateY(24px); filter: blur(8px); }
+          to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+        }
+        @keyframes glassOut {
+          from { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+          to   { opacity: 0; transform: translateY(-16px); filter: blur(6px); }
+        }
+        @keyframes sheetSlideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to   { transform: translateY(0);    opacity: 1; }
+        }
+        @keyframes sheetSlideDown {
+          from { transform: translateY(0);    opacity: 1; }
+          to   { transform: translateY(100%); opacity: 0; }
+        }
+        .motion-live-stage {
+          position: relative; border: 1px solid var(--line);
+          overflow: hidden; min-height: 180px;
+          background:
+            radial-gradient(ellipse at 30% 40%, rgba(123,158,255,0.22) 0%, transparent 55%),
+            linear-gradient(145deg, #04050f 0%, #080c20 100%);
+          display: flex; align-items: center; justify-content: center;
+        }
+        .motion-demo-card {
+          backdrop-filter: blur(24px) saturate(150%);
+          -webkit-backdrop-filter: blur(24px) saturate(150%);
+          background: rgba(10,12,28,0.58);
+          border: 1px solid rgba(123,158,255,0.20);
+          padding: 16px 20px; width: 200px;
+          animation: glassIn 600ms cubic-bezier(.2,.7,.2,1) both;
+        }
+        .motion-demo-card.out { animation: glassOut 400ms cubic-bezier(.4,0,.6,1) both; }
+        .motion-demo-card .mdc-label {
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+        }
+        .motion-demo-card .mdc-title { font-size: 14px; font-weight: 600; }
+        .motion-replay {
+          position: absolute; bottom: 10px; right: 12px;
+          font-family: var(--font-mono); font-size: 9px;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--accent); cursor: pointer; opacity: 0.7;
+          background: none; border: none; padding: 0;
+        }
+        .motion-replay:hover { opacity: 1; }
+
+        .motion-live-sheet-stage {
+          position: relative; border: 1px solid var(--line);
+          overflow: hidden; min-height: 180px;
+          background:
+            radial-gradient(ellipse at 70% 30%, rgba(123,158,255,0.18) 0%, transparent 55%),
+            linear-gradient(145deg, #04050f 0%, #080c20 100%);
+        }
+        .motion-demo-sheet {
+          backdrop-filter: blur(36px) saturate(170%);
+          -webkit-backdrop-filter: blur(36px) saturate(170%);
+          background: rgba(8,10,22,0.76);
+          border-top: 1px solid rgba(123,158,255,0.18);
+          position: absolute; bottom: 0; left: 0; right: 0;
+          padding: 16px 18px 20px;
+          animation: sheetSlideUp 520ms cubic-bezier(.2,.7,.2,1) both;
+        }
+        .motion-demo-sheet.out { animation: sheetSlideDown 380ms cubic-bezier(.4,0,.6,1) both; }
+        .motion-demo-sheet .mds-handle {
+          width: 28px; height: 3px;
+          background: rgba(123,158,255,0.28); margin: 0 auto 10px;
+        }
+        .motion-demo-sheet .mds-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+        .motion-demo-sheet .mds-sub { font-size: 11px; color: var(--fg-dim); }
+      </style>
+
+      <!-- ────────────────────────────────────────── -->
+      <h3 style="font-size:13px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);margin:48px 0 4px">亮色模式变体 · LIGHT MODE</h3>
+      <p style="font-size:14px;color:var(--fg-dim);margin:0 0 18px;max-width:580px">亮色背景下，毛玻璃改用<em style="color:#5b7ef5">白色半透明 + 蓝色边线</em>——维持同等层次感，同时避免在明亮场景中显得沉重。brightness(1.04) 防止玻璃层在白色背景下"消失"。</p>
+
+      <!-- DARK / LIGHT COMPARE NAV -->
+      <div class="mode-compare">
+        <div class="mode-compare-label dark">◼ DARK · 深色模式</div>
+        <div class="mode-compare-label light">◻ LIGHT · 亮色模式</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-top:0;">
+        <!-- dark nav -->
+        <div class="glass-scene" style="min-height:160px;border:0;border-right:1px solid var(--line);">
+          <div style="position:absolute;top:64px;left:14px;right:14px;display:flex;flex-direction:column;gap:8px">
+            <div style="height:44px;border:1px solid var(--line);background:rgba(123,158,255,0.05);padding:10px;font-size:12px">精选工具 · 本周推荐</div>
+            <div style="height:36px;border:1px solid var(--line);background:rgba(123,158,255,0.03);padding:8px;font-size:11px;color:var(--fg-dim)">社区热帖 / 36</div>
+          </div>
+          <div class="demo-navbar glass-layer" style="padding:12px 14px 10px;">
+            <span class="nav-back" style="font-size:9px">返回</span>
+            <span class="nav-title" style="font-size:14px">云图</span>
+            <span class="nav-action" style="font-size:9px">分享</span>
+          </div>
+        </div>
+        <!-- light nav -->
+        <div class="glass-scene-light" style="min-height:160px;border:0;">
+          <div class="scene-label-light"></div>
+          <div style="position:absolute;top:64px;left:14px;right:14px;display:flex;flex-direction:column;gap:8px">
+            <div style="height:44px;border:1px solid rgba(91,126,245,0.15);background:rgba(91,126,245,0.04);padding:10px;font-size:12px;color:#0a0e1a">精选工具 · 本周推荐</div>
+            <div style="height:36px;border:1px solid rgba(91,126,245,0.10);background:rgba(91,126,245,0.02);padding:8px;font-size:11px;color:rgba(10,14,26,0.45)">社区热帖 / 36</div>
+          </div>
+          <div class="demo-navbar-light glass-layer-light" style="padding:12px 14px 10px;">
+            <span class="nav-back" style="font-size:9px">返回</span>
+            <span class="nav-title" style="font-size:14px">云图</span>
+            <span class="nav-action" style="font-size:9px">分享</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DARK / LIGHT COMPARE TAB + CARD -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+        <!-- dark tab bar -->
+        <div class="glass-scene" style="min-height:200px;">
+          <div style="position:absolute;top:16px;left:14px;right:14px">
+            <div style="font-size:18px;font-weight:600">发现 AI</div>
+            <div style="font-size:12px;color:var(--fg-dim);margin-top:6px">深色底 · Dark Mode</div>
+          </div>
+          <div class="demo-tabbar glass-layer">
+            <div class="tab-item active"><div class="tab-icon">◎</div><span>发现</span></div>
+            <div class="tab-item"><div class="tab-icon">▣</div><span>工具</span></div>
+            <div class="tab-item"><div class="tab-icon">◌</div><span>社区</span></div>
+            <div class="tab-item"><div class="tab-icon">◻</div><span>我的</span></div>
+          </div>
+        </div>
+        <!-- light tab bar -->
+        <div class="glass-scene-light" style="min-height:200px;">
+          <div class="scene-label-light"></div>
+          <div style="position:absolute;top:16px;left:14px;right:14px">
+            <div style="font-size:18px;font-weight:600;color:#0a0e1a">发现 AI</div>
+            <div style="font-size:12px;color:rgba(10,14,26,0.45);margin-top:6px">亮色底 · Light Mode</div>
+          </div>
+          <div class="demo-tabbar-light glass-layer-light">
+            <div class="tab-item-l active"><div class="tab-icon-l">◎</div><span>发现</span></div>
+            <div class="tab-item-l"><div class="tab-icon-l">▣</div><span>工具</span></div>
+            <div class="tab-item-l"><div class="tab-icon-l">◌</div><span>社区</span></div>
+            <div class="tab-item-l"><div class="tab-icon-l">◻</div><span>我的</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DARK / LIGHT COMPARE SHEET -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+        <div class="glass-scene" style="min-height:200px;">
+          <div style="position:absolute;top:18px;left:16px;font-size:13px;font-weight:500">加入今日课程</div>
+          <div class="demo-sheet glass-layer">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title">附近正在进行</div>
+            <div class="sheet-desc">今天 15:00 · 摄影入门</div>
+            <div class="sheet-btn" style="margin-top:10px;padding:8px 14px;font-size:9px">立即报名</div>
+          </div>
+        </div>
+        <div class="glass-scene-light" style="min-height:200px;">
+          <div class="scene-label-light"></div>
+          <div style="position:absolute;top:18px;left:16px;font-size:13px;font-weight:600;color:#0a0e1a">加入今日课程</div>
+          <div class="demo-sheet-light glass-layer-light">
+            <div class="sheet-handle-l"></div>
+            <div class="sheet-title-l">附近正在进行</div>
+            <div class="sheet-desc-l">今天 15:00 · 摄影入门</div>
+            <div class="sheet-btn-l" style="margin-top:10px;padding:8px 14px;font-size:9px">立即报名</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Light mode spec table -->
+      <h3 style="font-size:13px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);margin:32px 0 0">亮色模式参数表</h3>
+      <table class="glass-spec-table glass-spec-table-light" style="margin-top:16px;">
+        <thead>
+          <tr>
+            <th style="color:#5b7ef5">层级 / 组件</th>
+            <th style="color:#5b7ef5">blur</th>
+            <th style="color:#5b7ef5">filter 附加</th>
+            <th style="color:#5b7ef5">背景色（rgba）</th>
+            <th style="color:#5b7ef5">边线</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>L1 · Nav Bar</td>
+            <td><span class="mono-val-l">28px</span></td>
+            <td><span class="mono-val-l">brightness(1.04)</span></td>
+            <td><span class="mono-val-l">rgba(248,250,255,0.72)</span></td>
+            <td><span class="mono-val-l">rgba(91,126,245,0.16)</span></td>
+          </tr>
+          <tr>
+            <td>L2 · Tab Bar</td>
+            <td><span class="mono-val-l">32px</span></td>
+            <td><span class="mono-val-l">brightness(1.06)</span></td>
+            <td><span class="mono-val-l">rgba(245,248,255,0.80)</span></td>
+            <td><span class="mono-val-l">rgba(91,126,245,0.12)</span></td>
+          </tr>
+          <tr>
+            <td>L3 · Float Card</td>
+            <td><span class="mono-val-l">24px</span></td>
+            <td><span class="mono-val-l">brightness(1.03)</span></td>
+            <td><span class="mono-val-l">rgba(255,255,255,0.65)</span></td>
+            <td><span class="mono-val-l">rgba(91,126,245,0.22)</span></td>
+          </tr>
+          <tr>
+            <td>L4 · Sheet</td>
+            <td><span class="mono-val-l">36px</span></td>
+            <td><span class="mono-val-l">brightness(1.05)</span></td>
+            <td><span class="mono-val-l">rgba(246,249,255,0.82)</span></td>
+            <td><span class="mono-val-l">rgba(91,126,245,0.20)</span></td>
+          </tr>
+          <tr>
+            <td>L5 · Tooltip</td>
+            <td><span class="mono-val-l">16px</span></td>
+            <td><span class="mono-val-l">brightness(1.02)</span></td>
+            <td><span class="mono-val-l">rgba(255,255,255,0.55)</span></td>
+            <td><span class="mono-val-l">rgba(91,126,245,0.18)</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ────────────────────────────────────────── -->
+      <!-- MOTION SPEC -->
+      <h3 style="font-size:13px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--fg-dim);margin:52px 0 4px">动效过渡规范 · GLASS MOTION</h3>
+      <p style="font-size:14px;color:var(--fg-dim);margin:0 0 4px;max-width:580px">毛玻璃层的进出场动效与主系统动效语言保持一致——<em>缓出曲线、有重量感</em>——并在此基础上叠加 blur 从模糊到清晰的「聚焦」效果，强化层次感的出现感知。</p>
+
+      <!-- Live demos -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 0;">
+        <!-- Card In/Out -->
+        <div>
+          <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--fg-faint);margin-bottom:8px">CARD · 浮层卡片进场</div>
+          <div class="motion-live-stage" id="motionCardStage">
+            <div class="motion-demo-card" id="motionCard">
+              <div class="mdc-label">快速视频 · Quick Video</div>
+              <div class="mdc-title">用 iPhone 拍摄广角人像</div>
+            </div>
+            <button class="motion-replay" onclick="replayCard()">▶ 重播</button>
+          </div>
+        </div>
+        <!-- Sheet Slide Up -->
+        <div>
+          <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--fg-faint);margin-bottom:8px">SHEET · 底部抽屉进场</div>
+          <div class="motion-live-sheet-stage" id="motionSheetStage">
+            <div style="position:absolute;top:16px;left:16px;font-size:13px;font-weight:500">加入今日课程</div>
+            <div class="motion-demo-sheet" id="motionSheet">
+              <div class="mds-handle"></div>
+              <div class="mds-title">附近正在进行</div>
+              <div class="mds-sub">今天 15:00 · 摄影入门</div>
+            </div>
+            <button class="motion-replay" onclick="replaySheet()">▶ 重播</button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function replayCard() {
+          var el = document.getElementById('motionCard');
+          el.style.animation = 'none';
+          el.offsetWidth; // reflow
+          el.style.animation = 'glassIn 600ms cubic-bezier(.2,.7,.2,1) both';
+        }
+        function replaySheet() {
+          var el = document.getElementById('motionSheet');
+          el.style.animation = 'none';
+          el.offsetWidth;
+          el.style.animation = 'sheetSlideUp 520ms cubic-bezier(.2,.7,.2,1) both';
+        }
+      </script>
+
+      <!-- Motion spec cards -->
+      <div class="glass-motion-grid">
+        <div class="glass-motion-card">
+          <div class="gm-tag">M1 · GLASS-IN</div>
+          <div class="gm-name">浮层 / 卡片 入场</div>
+          <div class="gm-timing">600ms · cubic-bezier(.2, .7, .2, 1)</div>
+          <div class="gm-desc">opacity 0→1 + translateY(24px)→0 + blur(12px)→0。三属性同步，blur 聚焦感营造"从背景升起"的质感。</div>
+          <div class="gm-code">animation: glassIn 600ms
+  cubic-bezier(.2,.7,.2,1) both;
+
+@keyframes glassIn {
+  from { opacity:0; transform:translateY(24px);
+         filter:blur(12px); }
+  to   { opacity:1; transform:translateY(0);
+         filter:blur(0); }
+}</div>
+        </div>
+
+        <div class="glass-motion-card">
+          <div class="gm-tag">M2 · GLASS-OUT</div>
+          <div class="gm-name">浮层 / 卡片 退场</div>
+          <div class="gm-timing">380ms · cubic-bezier(.4, 0, .6, 1)</div>
+          <div class="gm-desc">opacity 1→0 + translateY(0)→-16px + blur(0)→6px。退场比入场快 40%，避免用户等待。</div>
+          <div class="gm-code">animation: glassOut 380ms
+  cubic-bezier(.4,0,.6,1) both;
+
+@keyframes glassOut {
+  from { opacity:1; transform:translateY(0);
+         filter:blur(0); }
+  to   { opacity:0; transform:translateY(-16px);
+         filter:blur(6px); }
+}</div>
+        </div>
+
+        <div class="glass-motion-card">
+          <div class="gm-tag">M3 · SHEET-UP</div>
+          <div class="gm-name">底部抽屉 升起</div>
+          <div class="gm-timing">520ms · cubic-bezier(.2, .7, .2, 1)</div>
+          <div class="gm-desc">translateY(100%)→0 + opacity 0→1。纯位移，不叠加 blur——Sheet 层级最高，不需要聚焦感，只需重量感。</div>
+          <div class="gm-code">animation: sheetSlideUp 520ms
+  cubic-bezier(.2,.7,.2,1) both;
+
+@keyframes sheetSlideUp {
+  from { transform:translateY(100%);
+         opacity:0; }
+  to   { transform:translateY(0);
+         opacity:1; }
+}</div>
+        </div>
+
+        <div class="glass-motion-card">
+          <div class="gm-tag">M4 · SHEET-DOWN</div>
+          <div class="gm-name">底部抽屉 收起</div>
+          <div class="gm-timing">360ms · cubic-bezier(.4, 0, .6, 1)</div>
+          <div class="gm-desc">translateY(0)→100% + opacity 1→0。收起动效快且干脆，参照 iOS Sheet dismiss 节奏。</div>
+          <div class="gm-code">animation: sheetSlideDown 360ms
+  cubic-bezier(.4,0,.6,1) both;
+
+@keyframes sheetSlideDown {
+  from { transform:translateY(0);
+         opacity:1; }
+  to   { transform:translateY(100%);
+         opacity:0; }
+}</div>
+        </div>
+
+        <div class="glass-motion-card">
+          <div class="gm-tag">M5 · NAV-BLUR-IN</div>
+          <div class="gm-name">导航栏 页面滚动激活</div>
+          <div class="gm-timing">transition: 280ms · ease-out</div>
+          <div class="gm-desc">页面从顶部滚动超过 8px 时，导航栏毛玻璃从透明 → 完整效果。使用 transition 而非 animation，与滚动实时联动。</div>
+          <div class="gm-code">/* 初始：透明导航栏 */
+.navbar { background: transparent;
+  backdrop-filter: none; transition:
+  background 280ms ease-out,
+  backdrop-filter 280ms ease-out; }
+
+/* 滚动后激活 */
+.navbar.scrolled {
+  background: rgba(5,6,18,0.62);
+  backdrop-filter: blur(28px) saturate(160%); }</div>
+        </div>
+
+        <div class="glass-motion-card">
+          <div class="gm-tag">M6 · STAGGER</div>
+          <div class="gm-name">多卡片交错入场</div>
+          <div class="gm-timing">delay: n × 60ms</div>
+          <div class="gm-desc">列表中多个玻璃卡片依次入场时，每张卡片的 animation-delay 以 60ms 递增，形成"逐一浮现"的视觉节奏。</div>
+          <div class="gm-code">/* 每张卡片叠加 delay */
+.glass-card:nth-child(1) { animation-delay: 0ms; }
+.glass-card:nth-child(2) { animation-delay: 60ms; }
+.glass-card:nth-child(3) { animation-delay: 120ms; }
+.glass-card:nth-child(n) {
+  animation-delay: calc((n - 1) * 60ms); }</div>
+        </div>
+      </div>
+
+      <!-- Motion principles summary -->
+      <div style="margin-top:28px;padding:20px 22px;border:1px solid var(--line);background:rgba(123,158,255,0.02)">
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.28em;color:var(--accent);text-transform:uppercase;margin-bottom:14px">动效原则 · Motion Principles</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px 24px;">
+          <div>
+            <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;color:var(--accent);margin-bottom:4px">01 · 入慢出快</div>
+            <div style="font-size:12px;color:var(--fg-dim);line-height:1.6">入场 600ms，退场 360–380ms。符合人类注意力分配——入场需感受重量，退场需干净利落。</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;color:var(--accent);margin-bottom:4px">02 · blur 只用于入场</div>
+            <div style="font-size:12px;color:var(--fg-dim);line-height:1.6">blur 聚焦感仅在进入时使用（glassIn），退场使用轻微 blur(6px) 即可，避免过度设计感。</div>
+          </div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.16em;color:var(--accent);margin-bottom:4px">03 · 禁止回弹</div>
+            <div style="font-size:12px;color:var(--fg-dim);line-height:1.6">所有毛玻璃动效禁止使用 spring / bounce 曲线。弹性属于活泼产品，云图追求电影感的沉稳。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      云图 · ATLAS<span class="sep">·</span>BRAND DESIGN MANUAL<span class="sep">·</span>v0.1<br>
+      JOSH<span class="sep">·</span>2026<span class="sep">·</span>A BLUEPRINT IN MOTION
+    </footer>
+
+  </div>
+
+</body>
+</html>
