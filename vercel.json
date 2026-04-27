@@ -1,4 +1,8 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/intro", "destination": "https://altas-alpha.vercel.app" },
+    { "source": "/intro/:path*", "destination": "https://altas-alpha.vercel.app/:path*" }
+  ]
 }
